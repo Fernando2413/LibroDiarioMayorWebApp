@@ -1,0 +1,44 @@
+﻿@model LibroDiarioMayorWebApp.Models.Catalogo
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Catalogo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="NumeroCuenta" />
+            <div class="form-group">
+                <label asp-for="NombreCuenta" class="control-label"></label>
+                <input asp-for="NombreCuenta" class="form-control" />
+                <span asp-validation-for="NombreCuenta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoCuenta" class="control-label"></label>
+                <input asp-for="TipoCuenta" class="form-control" />
+                <span asp-validation-for="TipoCuenta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IncluidaEn" class="control-label"></label>
+                <input asp-for="IncluidaEn" class="form-control" />
+                <span asp-validation-for="IncluidaEn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

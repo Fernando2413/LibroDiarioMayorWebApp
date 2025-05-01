@@ -1,0 +1,99 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem rgb(120, 205, 120), 0px 0px 0px 4px rgb(0,40,0);
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: rgb(153, 209, 183);
+}
+
+.card{
+    border-color: rgb(170, 255, 170) !important;
+}
+.card-header {
+    background-color: rgb(0, 64, 0);
+    text-align: center;
+    font-weight: bold;
+    border-color: rgb(170, 255, 170) !important;
+    color: rgb(170, 255, 170);
+}
+
+.form-label{
+    color:rgb(0,64,0);
+}
+.card-body {
+    background-color: rgb(153, 209, 180) !important;
+    border-radius: 0 0 calc(.25rem - 1px) calc(.25rem - 1px);
+}
+
+nav {
+    background-color: rgb(0, 64, 0);
+}
+
+input[type=button], [type=reset], [type=submit] {
+    background-color: rgb(0,64, 0);
+    color: rgb(170, 255, 170);
+    font-weight: bold;
+    border: solid 2px rgb(170, 255, 170);
+}
+
+input[type=button]:hover, [type=reset]:hover, [type=submit]:hover {
+    background-color: rgb(170, 255, 170);
+    color: rgb(0, 64, 0);
+    border: solid 2px rgb(0, 64, 0);
+    box-shadow: 0 0 0 0.1rem rgb(170, 255, 170), 0px 0px 0px 4px rgb(0,64,0);
+
+}
+input[type=button]:active, [type=reset]:active, [type=submit]:active {
+    background-color: rgb(120, 205, 120);
+    color: rgb(0, 30, 0);
+    border: solid 2px rgb(0, 30, 0);
+    box-shadow: 0 0 0 0.1rem rgb(120, 205, 120), 0px 0px 0px 4px rgb(0,40,0);
+    transition: none;
+}
+
+input[type=button]:focus, [type=reset]:focus, [type=submit]:focus {
+    background-color: rgb(120, 205, 120);
+    color: rgb(0, 30, 0);
+    border: solid 2px rgb(0, 30, 0);
+    box-shadow: 0 0 0 0.1rem rgb(120, 205, 120), 0px 0px 0px 4px rgb(0,40,0);
+}
+
+input[type=radio], [type=range] {
+    accent-color: rgb(0, 64, 0);
+}
+
+input[type=date], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text] {
+    border-color: rgb(170, 255, 170);
+    caret-color: rgb(0, 64, 0);
+    background-color: rgb(0, 64 ,0);
+    color: rgb(170,255,170);
+    font-weight:bold;
+}
+
+input[type=date]:hover, [type=datetime-local]:hover, [type=email]:hover, [type=month]:hover, [type=number]:hover, [type=password]:hover, [type=search]:hover, [type=tel]:hover, [type=text]:hover {
+    background-color: rgb(0,90, 0);
+    color: rgb(140, 255, 140);
+}
+
+input[type=date]:focus, [type=datetime-local]:focus, [type=email]:focus, [type=month]:focus, [type=number]:focus, [type=password]:focus, [type=search]:focus, [type=tel]:focus, [type=text]:focus {
+    background-color: rgb(170,255, 170);
+    border-color: rgb(0, 64, 0) !important;
+    box-shadow: 0 0 0 0.1rem rgb(170, 255, 170), 0px 0px 0px 4px rgb(0,64,0);
+    color: rgb(0, 64, 0);
+}
