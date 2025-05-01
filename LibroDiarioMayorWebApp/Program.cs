@@ -12,7 +12,7 @@ namespace LibroDiarioMayorWebApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddDbContext<DiarioMayorContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+            builder.Services.AddDbContext<DiarioMayorContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
             var app = builder.Build();
 
