@@ -47,6 +47,11 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult Iniciar()
+        {
+            return View();
+        }
 
         // POST: Usuarios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

@@ -1,11 +1,17 @@
-﻿@model IEnumerable<LibroDiarioMayorWebApp.Models.Usuario>
+﻿@using System.Security.Claims;
+@model IEnumerable<LibroDiarioMayorWebApp.Models.Usuario>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
+@if (User.Identity!.IsAuthenticated)
+{
+    <p>
+        @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
+    </p>
+}
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -60,12 +66,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Clave)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
-            </td>
-        </tr>
+                
+                @if (item.TipoUsuario != "Admin")
+                {
+                    <td>
+
+                        <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
+
+                    </td>
+                }
+                else
+                {
+                     <td>
+                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a>
+                    </td>
+                }
+            </tr>
 }
     </tbody>
 </table>

@@ -1,5 +1,8 @@
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
+using Microsoft.Extensions.Options;
 
 namespace LibroDiarioMayorWebApp
 {
@@ -14,7 +17,16 @@ namespace LibroDiarioMayorWebApp
 
             builder.Services.AddDbContext<DiarioMayorContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
-            var app = builder.Build();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/Home/Login";
+                options.AccessDeniedPath = "/Home/Login/";
+                options.LogoutPath = "/Home/Login/";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+            }
+            );
+
+                var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -24,12 +36,12 @@ namespace LibroDiarioMayorWebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Login}/{id?}");
 
             app.Run();
         }
