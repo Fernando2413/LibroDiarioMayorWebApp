@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
@@ -16,7 +17,6 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             _Context = context; 
         }
-
         public IActionResult Login()
         {
             return View();
@@ -27,12 +27,12 @@ namespace LibroDiarioMayorWebApp.Controllers
             await HttpContext.SignOutAsync();
             return View("Login");
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

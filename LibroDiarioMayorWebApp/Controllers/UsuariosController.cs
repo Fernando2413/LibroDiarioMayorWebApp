@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly DiarioMayorContext _context;
-
+        
         public UsuariosController(DiarioMayorContext context)
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {

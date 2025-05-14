@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
+    [Authorize]
     public class CatalogoController : Controller
     {
         private readonly DiarioMayorContext _context;
