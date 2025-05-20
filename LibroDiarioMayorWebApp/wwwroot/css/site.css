@@ -43,23 +43,30 @@ body {
 
 nav {
     background-color: rgb(0, 64, 0);
+    align-content:center;
+    height: 80px;
 }
 
-input[type=button], [type=reset], [type=submit] {
+.layout-nav {
+    font-weight: bold;
+    color: rgb(170, 255, 170) !important;
+}
+
+input[type=button], [type=reset], [type=submit], button:valid{
     background-color: rgb(0,64, 0);
     color: rgb(170, 255, 170);
     font-weight: bold;
     border: solid 2px rgb(170, 255, 170);
 }
 
-input[type=button]:hover, [type=reset]:hover, [type=submit]:hover {
+input[type=button]:hover, [type=reset]:hover, [type=submit]:hover, button:hover {
     background-color: rgb(170, 255, 170);
     color: rgb(0, 64, 0);
     border: solid 2px rgb(0, 64, 0);
     box-shadow: 0 0 0 0.1rem rgb(170, 255, 170), 0px 0px 0px 4px rgb(0,64,0);
 
 }
-input[type=button]:active, [type=reset]:active, [type=submit]:active {
+input[type=button]:active, [type=reset]:active, [type=submit]:active, button:active {
     background-color: rgb(120, 205, 120);
     color: rgb(0, 30, 0);
     border: solid 2px rgb(0, 30, 0);
@@ -67,7 +74,7 @@ input[type=button]:active, [type=reset]:active, [type=submit]:active {
     transition: none;
 }
 
-input[type=button]:focus, [type=reset]:focus, [type=submit]:focus {
+input[type=button]:focus, [type=reset]:focus, [type=submit]:focus, button:focus {
     background-color: rgb(120, 205, 120);
     color: rgb(0, 30, 0);
     border: solid 2px rgb(0, 30, 0);
@@ -79,21 +86,103 @@ input[type=radio], [type=range] {
 }
 
 input[type=date], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text] {
-    border-color: rgb(170, 255, 170);
+    border: 2px solid rgb(170, 255, 170) !important;
     caret-color: rgb(0, 64, 0);
-    background-color: rgb(0, 64 ,0);
+    background-color: rgb(0, 64,0);
     color: rgb(170,255,170);
-    font-weight:bold;
+    font-weight: bold;
 }
 
-input[type=date]:hover, [type=datetime-local]:hover, [type=email]:hover, [type=month]:hover, [type=number]:hover, [type=password]:hover, [type=search]:hover, [type=tel]:hover, [type=text]:hover {
+input[type=date]:hover, [type=datetime-local]:hover, [type=email]:hover, [type=month]:hover, [type=number]:hover, [type=password]:hover, [type=search]:hover, [type=tel]:hover, [type=text]:hover{
     background-color: rgb(0,90, 0);
     color: rgb(140, 255, 140);
 }
 
-input[type=date]:focus, [type=datetime-local]:focus, [type=email]:focus, [type=month]:focus, [type=number]:focus, [type=password]:focus, [type=search]:focus, [type=tel]:focus, [type=text]:focus {
+input[type=date]:focus, [type=datetime-local]:focus, [type=email]:focus, [type=month]:focus, [type=number]:focus, [type=password]:focus, [type=search]:focus, [type=tel]:focus, [type=text]:focus{
     background-color: rgb(170,255, 170);
     border-color: rgb(0, 64, 0) !important;
     box-shadow: 0 0 0 0.1rem rgb(170, 255, 170), 0px 0px 0px 4px rgb(0,64,0);
     color: rgb(0, 64, 0);
 }
+
+select {
+    background:none;
+    background-color: rgb(0, 64, 0) !important;
+    border: 2px solid rgb(170, 255, 170) !important;
+    color: rgb(170, 255, 170) !important;
+    font-weight: bold !important;
+    caret-color: rgb(170, 255, 170);
+}
+select:hover {
+    background-color: rgb(0, 90, 0) !important;
+    color: rgb(140, 255, 140) !important;
+}
+select:focus {
+    background-color: rgb(170, 255, 170) !important;
+    border: 2px solid rgb(0, 64, 0) !important;
+    color: rgb(0, 64, 0) !important;
+    box-shadow: 0 0 0 0.1rem rgb(170, 255, 170), 0px 0px 0px 4px rgb(0,64,0) !important;
+}
+
+.logo-index {
+    width: 450px;
+    height: 450px;
+    display: block;
+    margin: auto;
+}
+
+.index-bienvenida {
+    font-weight: bold;
+    color: rgb(170, 255, 170);
+    font-size: 58px;
+    text-align: center;
+    -webkit-text-stroke: rgb(0, 64, 0) 4px;
+    background: linear-gradient(to bottom, rgb(200, 255, 200), rgb(170, 255, 170), rgb(0, 96, 0), rgb(170, 255, 170));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+}
+.dropbtn {
+    margin-top: 4px;
+    width: 65px;
+    border-radius:32px
+}
+
+.dropbtn:hover {
+    opacity: 50%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(0, 64, 0);
+    border: 3px, solid rgb(170, 255, 170);
+    min-width: 160px;
+    box-shadow: 0 0 0 0.2rem rgb(170, 255, 170);
+    z-index: 1;
+    right: 0px;
+}
+
+.dropdown-content a{
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-item:any-link {
+    color: rgb(170, 255, 170);
+    font-weight: bold;
+}
+
+.dropdown-item:any-link:hover {
+    background-color: rgb(170, 255, 170);
+    color: rgb(0, 64, 0);
+}
+.dropdown:hover .dropdown-content {
+    display: block flow;
+}
+

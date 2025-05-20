@@ -14,4 +14,6 @@ public partial class Partida
     public decimal? Debe { get; set; }
 
     public decimal? Haber { get; set; }
+
+    public int? IngresadoPor { get; set; }
 }

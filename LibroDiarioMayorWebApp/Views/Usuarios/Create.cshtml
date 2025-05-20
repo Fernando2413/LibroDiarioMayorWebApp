@@ -4,49 +4,43 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Crear Usuario</h1>
 
-<h4>Usuario</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label"></label>
-                <input asp-for="NombreUsuario" class="form-control" />
+                <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario</label>
+                <input asp-for="NombreUsuario" class="form-control d-grid mb-2" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TipoUsuario" class="control-label"></label>
-                <input asp-for="TipoUsuario" class="form-control" />
-                <span asp-validation-for="TipoUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
+                <input asp-for="Telefono" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
+                <input asp-for="Direccion" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Correo" class="control-label"></label>
-                <input asp-for="Correo" class="form-control" />
+                <input asp-for="Correo" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UltInicio" class="control-label"></label>
-                <input asp-for="UltInicio" class="form-control" />
-                <span asp-validation-for="UltInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Clave" class="control-label"></label>
-                <input asp-for="Clave" class="form-control" />
+                <input asp-for="Clave" type="password" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Clave" class="text-danger"></span>
             </div>
+                <input asp-for="TipoUsuario" type="hidden" value="Usuario" />
+                <span asp-validation-for="TipoUsuario" class="text-danger"></span>
+
+                <input asp-for="UltInicio" type="hidden" value="" />
+                <span asp-validation-for="UltInicio" class="text-danger"></span>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

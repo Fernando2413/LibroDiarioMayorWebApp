@@ -1,46 +1,55 @@
-﻿@model LibroDiarioMayorWebApp.Models.Catalogo
+﻿@model LibroDiarioMayorWebApp.Models.Catalogo 
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Cuenta";
 }
 
-<h1>Create</h1>
+<h1>Crear Cuenta de Catalogo</h1>
 
-<h4>Catalogo</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NumeroCuenta" class="control-label"></label>
-                <input asp-for="NumeroCuenta" class="form-control" />
+                <label asp-for="NumeroCuenta" class="control-label">Numero de Cuenta:</label>
+                <input asp-for="NumeroCuenta" class="form-control d-grid mb-2" />
                 <span asp-validation-for="NumeroCuenta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NombreCuenta" class="control-label"></label>
-                <input asp-for="NombreCuenta" class="form-control" />
+                <label asp-for="NombreCuenta" class="control-label">Nombre de Cuenta:</label>
+                <input asp-for="NombreCuenta" class="form-control d-grid mb-2" />
                 <span asp-validation-for="NombreCuenta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TipoCuenta" class="control-label"></label>
-                <input asp-for="TipoCuenta" class="form-control" />
+                <label asp-for="TipoCuenta" class="control-label ">Tipo de Cuenta:</label>
+                <select asp-for="TipoCuenta" class="form-select d-grid mb-2">
+                    <option value="" disabled selected hidden>Seleccione...</option>
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="PASIVO">PASIVO</option>
+                    <option value="CAPITAL">CAPITAL</option>
+                    <option value="CUENTA DEUDORA">CUENTA DE RESULTADO DEUDORA</option>
+                    <option value="CUENTA ACREEDORA">CUENTA DE RESULTADO ACREEDORA</option>
+                </select>
                 <span asp-validation-for="TipoCuenta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IncluidaEn" class="control-label"></label>
-                <input asp-for="IncluidaEn" class="form-control" />
+                <label asp-for="IncluidaEn" class="control-label">Se incluira en:</label>
+                <select asp-for="IncluidaEn" class="form-select d-grid mb-2">
+                    <option value="" disabled selected hidden>Seleccione...</option>
+                    <option value="Balance General">Balance General</option>
+                    <option value="Estado de Resultado">Estado de Resultado</option>
+                </select>
                 <span asp-validation-for="IncluidaEn" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {

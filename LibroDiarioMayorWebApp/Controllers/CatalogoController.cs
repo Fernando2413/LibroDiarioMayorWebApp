@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using System.Collections.Immutable;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MoreLinq;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
@@ -19,7 +23,13 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             _context = context;
         }
+        public DataTable GetCatalogo()
+        {
+            DataTable catalogo = _context.Catalogos.ToDataTable();
+            return catalogo;
 
+
+        }
         // GET: Catalogo
         public async Task<IActionResult> Index()
         {
@@ -47,6 +57,7 @@ namespace LibroDiarioMayorWebApp.Controllers
         // GET: Catalogo/Create
         public IActionResult Create()
         {
+            ViewData["TablaCatalogo"] = GetCatalogo();
             return View();
         }
 
@@ -73,7 +84,6 @@ namespace LibroDiarioMayorWebApp.Controllers
             {
                 return NotFound();
             }
-
             var catalogo = await _context.Catalogos.FindAsync(id);
             if (catalogo == null)
             {

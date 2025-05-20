@@ -1,25 +1,28 @@
 ﻿@model IEnumerable<LibroDiarioMayorWebApp.Models.Catalogo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Catalogo";
 }
 
-<h1>Index</h1>
+<h1>Catalogo de Cuentas</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear Nueva Cuenta</a>
 </p>
-<table class="table">
+<table class="table" id="tabla">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NombreCuenta)
+                Numero de Cuenta:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoCuenta)
+                Nombre de Cuenta:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IncluidaEn)
+                Tipo de cuenta:
+            </th>
+            <th>
+                Se incluye en:
             </th>
             <th></th>
         </tr>
@@ -27,6 +30,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroCuenta)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NombreCuenta)
             </td>
@@ -37,11 +43,12 @@
                 @Html.DisplayFor(modelItem => item.IncluidaEn)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NumeroCuenta">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.NumeroCuenta">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.NumeroCuenta">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.NumeroCuenta">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.NumeroCuenta">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.NumeroCuenta">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

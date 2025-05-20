@@ -6,12 +6,7 @@
 }
 
 <h1>Index</h1>
-@if (User.Identity!.IsAuthenticated)
-{
-    <p>
-        @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
-    </p>
-}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -35,9 +30,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UltInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clave)
             </th>
             <th></th>
         </tr>
@@ -63,17 +55,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UltInicio)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Clave)
-            </td>
                 
                 @if (item.TipoUsuario != "Admin")
                 {
                     <td>
 
-                        <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.IdUsuario">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.IdUsuario">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Detalles</a> |
+                        <a asp-action="Delete" asp-route-id="@item.IdUsuario">Eliminar</a>
 
                     </td>
                 }

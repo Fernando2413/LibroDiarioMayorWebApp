@@ -23,10 +23,6 @@ public partial class DiarioMayorContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        
-    }*/
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Catalogo>(entity =>
@@ -83,16 +79,18 @@ public partial class DiarioMayorContext : DbContext
             entity.Property(e => e.Haber)
                 .HasColumnType("money")
                 .HasColumnName("haber");
+            entity.Property(e => e.IngresadoPor).HasColumnName("ingresado_Por");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.IdUsuario).HasName("PK__tmp_ms_x__8E901EAAB53C102F");
 
+            entity.HasIndex(e => e.NombreUsuario, "UQ__Usuarios__81B20F412903E74E").IsUnique();
+
             entity.Property(e => e.IdUsuario).HasColumnName("id_Usuario");
             entity.Property(e => e.Clave)
                 .HasMaxLength(50)
-                .IsUnicode(false)
                 .HasColumnName("clave");
             entity.Property(e => e.Correo)
                 .HasMaxLength(150)

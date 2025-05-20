@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using MoreLinq.Extensions;
+using System.Data;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {

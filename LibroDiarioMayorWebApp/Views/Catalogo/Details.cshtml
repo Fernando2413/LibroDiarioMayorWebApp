@@ -1,29 +1,28 @@
 ﻿@model LibroDiarioMayorWebApp.Models.Catalogo
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de Cuenta";
 }
 
-<h1>Details</h1>
+<h1>Detalles de Cuenta de Catalogo</h1>
 
 <div>
-    <h4>Catalogo</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreCuenta)
+            Nombre de Cuenta:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.NombreCuenta)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoCuenta)
+            Tipo de Cuenta
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TipoCuenta)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IncluidaEn)
+            Se incluye en:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IncluidaEn)
@@ -31,6 +30,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.NumeroCuenta">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Editar" asp-route-id="@Model?.NumeroCuenta">Editar</a> |
+    <a asp-action="Index">Volver</a>
 </div>
