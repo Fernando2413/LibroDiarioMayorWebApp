@@ -11,9 +11,11 @@ using System.Data;
 using System.Collections.Immutable;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MoreLinq;
+using LibroDiarioMayorWebApp.Data;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     [Authorize]
     public class CatalogoController : Controller
     {
@@ -70,9 +72,18 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(catalogo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Catalogo? catalogo_Existe = await _context.Catalogos.Where(c => c.NumeroCuenta == catalogo.NumeroCuenta).FirstOrDefaultAsync();
+                if (catalogo_Existe != null)
+                {
+                    ViewData["Mensaje01"] = "Este Número de Cuenta ya esta en uso";
+                    return View(catalogo);
+                }
+                else
+                {
+                    _context.Add(catalogo);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(catalogo);
         }

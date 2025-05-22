@@ -6,7 +6,7 @@
     <div class="col-sm-4">
         <div class="card">
             <div class="card-header">
-            Iniciar Sesión
+                <h3 style="font-weight:bold" class="mb-2">Iniciar Sesión</h3>
             </div>
             <div class="card-body">
                 <form asp-controller = "Home" asp-action="Iniciar">
@@ -24,10 +24,16 @@
                         <input class="btn btn-primary" type="submit" value="Ingresar"/>
                     </div>
 
-                    @if (TempData["Mensaje"] != null)
+                    @if (TempData["Mensaje01"] != null)
                     {
                         <div class="alert alert-danger" role="alert">
-                            @TempData["Mensaje"]
+                            @TempData["Mensaje01"]
+                        </div>
+                    }
+                    @if (TempData["Mensaje02"] != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @TempData["Mensaje02"]
                         </div>
                     }
                 </form>

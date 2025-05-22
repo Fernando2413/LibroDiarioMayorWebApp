@@ -75,10 +75,10 @@ input[type=button]:active, [type=reset]:active, [type=submit]:active, button:act
 }
 
 input[type=button]:focus, [type=reset]:focus, [type=submit]:focus, button:focus {
-    background-color: rgb(120, 205, 120);
-    color: rgb(0, 30, 0);
-    border: solid 2px rgb(0, 30, 0);
-    box-shadow: 0 0 0 0.1rem rgb(120, 205, 120), 0px 0px 0px 4px rgb(0,40,0);
+    background-color: rgb(120, 205, 120) !important;
+    color: rgb(0, 30, 0) !important;
+    border: solid 2px rgb(0, 30, 0) !important;
+    box-shadow: 0 0 0 0.1rem rgb(120, 205, 120), 0px 0px 0px 4px rgb(0,40,0) !important;
 }
 
 input[type=radio], [type=range] {
@@ -125,8 +125,8 @@ select:focus {
 }
 
 .logo-index {
-    width: 450px;
-    height: 450px;
+    width: 400px;
+    height: 400px;
     display: block;
     margin: auto;
 }

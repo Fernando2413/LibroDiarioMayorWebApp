@@ -2,63 +2,92 @@
 @using System.Security.Claims;
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de Usuario";
 }
+@if (User.IsInRole("Administrador") == false && Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()) != Model.IdUsuario)
+{
+    <h1>No tienes permiso para ver este usuario</h1>
 
-<h1>Details</h1>
+    <div>
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+    </div>
+}
+else
+{
+<h1>Detalles de Usuario</h1>
 
 <div>
     <h4>Usuario</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreUsuario)
+            Nombre de Usuario:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreUsuario)
+            <b>@Html.DisplayFor(model => model.NombreUsuario)</b>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoUsuario)
+            Tipo de Usuario:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TipoUsuario)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Telefono)
+            Telefóno:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Telefono)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Direccion)
+            Dirección:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Direccion)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Correo)
+            Correo Electrónico:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Correo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UltInicio)
+            Ultimo Inicio de Sesión:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UltInicio)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Clave)
+            Contraseña:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Clave)
+                <p name="idClave" id="idClave">*****</p>
         </dd>
     </dl>
 </div>
 <div>
     @if (Model.IdUsuario == @Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()))
     {
-        <a asp-action="Edit" asp-route-id="@Model?.IdUsuario">Editar</a>
+        <div class="col-sm-2 mb-2">
+            <button class="form-control" onclick="MostrarClave()" id="btnClave">Mostrar Contraseña</button>
+        </div>
     }
-    <a asp-action="Index">Ver Usuarios</a>
+        <a asp-action="Edit" asp-route-id="@Model?.IdUsuario">Editar</a>
+    @if (User.IsInRole("Administrador"))
+    {
+        <a asp-action="Index">Ver Usuarios</a>
+    }
 </div>
+}
+<script>
+    function MostrarClave() {
+        if (document.getElementById("idClave").innerHTML === "*****") {
+            document.getElementById("idClave").innerHTML = '@Html.DisplayFor(model => model.Clave)'
+            document.getElementById("btnClave").innerHTML = 'Ocultar Contraseña'
+        }
+        else {
+            document.getElementById("idClave").innerHTML = "*****";
+            document.getElementById("btnClave").innerHTML = 'Mostrar Contraseña'
+        }
+    }
+</script>
+

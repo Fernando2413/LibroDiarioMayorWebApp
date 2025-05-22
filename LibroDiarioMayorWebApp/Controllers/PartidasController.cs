@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using LibroDiarioMayorWebApp.Data;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrador, Usuario")]
     public class PartidasController : Controller
     {
         private readonly DiarioMayorContext _context;

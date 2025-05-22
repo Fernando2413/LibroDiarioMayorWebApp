@@ -1,63 +1,74 @@
 ﻿@model LibroDiarioMayorWebApp.Models.Usuario
+@using System.Security.Claims;
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Usuario";
 }
 
-<h1>Edit</h1>
+@if (User.IsInRole("Administrador") == false && Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()) != Model.IdUsuario)
+{
+    <h1>No tienes permiso para editar este usuario</h1>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label"></label>
-                <input asp-for="NombreUsuario" class="form-control" />
-                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoUsuario" class="control-label"></label>
-                <input asp-for="TipoUsuario" class="form-control" />
-                <span asp-validation-for="TipoUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Correo" class="control-label"></label>
-                <input asp-for="Correo" class="form-control" />
-                <span asp-validation-for="Correo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UltInicio" class="control-label"></label>
-                <input asp-for="UltInicio" class="form-control" />
-                <span asp-validation-for="UltInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Clave" class="control-label"></label>
-                <input asp-for="Clave" class="form-control" />
-                <span asp-validation-for="Clave" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div>
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
     </div>
-</div>
+}
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+else
+{
+    <h1>Editar Usuario</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdUsuario"/>
+                <div class="form-group">
+                    <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario:</label>
+                    <input asp-for="NombreUsuario" class="form-control d-grid mb-2" />
+                    <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Telefono" class="control-label">Teléfono:</label>
+                    <input asp-for="Telefono" class="form-control d-grid mb-2" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Direccion" class="control-label">Dirección:</label>
+                    <input asp-for="Direccion" class="form-control d-grid mb-2" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Correo" class="control-label">Correo Electrónico:</label>
+                    <input asp-for="Correo" class="form-control d-grid mb-2" />
+                    <span asp-validation-for="Correo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Clave" class="control-label">Contraseña:</label>
+                    <input asp-for="Clave" type="password" class="form-control d-grid mb-2" />
+                    <span asp-validation-for="Clave" class="text-danger"></span>
+                </div>
+
+                <input asp-for="TipoUsuario" type="hidden" value="@Model.TipoUsuario" />
+                <span asp-validation-for="TipoUsuario" class="text-danger"></span>
+                
+                <input asp-for="UltInicio" type="hidden" value="@Model.UltInicio"/>
+                <span asp-validation-for="UltInicio" class="text-danger"></span>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+            @if (Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()) == Model.IdUsuario)
+            {
+                <p class="alert alert-info">Al editar tu propia contraseña, el sistema requerira que vuelvas a iniciar sesión</p>
+            }
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Volver</a>
+    </div>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

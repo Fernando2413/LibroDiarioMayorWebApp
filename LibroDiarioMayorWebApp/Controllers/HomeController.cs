@@ -8,16 +8,17 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore.Update;
+using LibroDiarioMayorWebApp.Data;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly DiarioMayorContext _Context = new DiarioMayorContext();
+        private readonly DiarioMayorContext _context = new DiarioMayorContext();
 
         public HomeController(DiarioMayorContext context)
         {
-            _Context = context; 
+            _context = context; 
         }
         public IActionResult Login()
         {
@@ -26,26 +27,34 @@ namespace LibroDiarioMayorWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View("Login");
         }
 
         [HttpPost]
         public async Task<IActionResult> Iniciar(Usuario modelo)
         {
-            Usuario? usuario_Existe = await _Context.Usuarios.Where(u =>
+            Usuario? usuario_Existe = await _context.Usuarios.Where(u =>
                 u.NombreUsuario == modelo.NombreUsuario &&
                 u.Clave == modelo.Clave
                 ).FirstOrDefaultAsync();
             if (usuario_Existe == null)
             {
-                TempData["Mensaje"] = "Usuario no valido";
+                TempData["Mensaje01"] = "Usuario no valido";
                 return RedirectToAction("Login");
+            }
+
+            if (usuario_Existe.UltInicio == null)
+            {
+                ViewData["ChPassword"] = true;
+                ViewData["Id"] = usuario_Existe.IdUsuario;
+                return View("NewPassword");
             }
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, usuario_Existe.NombreUsuario),
                 new Claim(ClaimTypes.NameIdentifier, Convert.ToString(usuario_Existe.IdUsuario), ClaimValueTypes.Integer32),
+                new Claim(ClaimTypes.Role, usuario_Existe.TipoUsuario)
             };
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             AuthenticationProperties properties = new AuthenticationProperties()
@@ -57,9 +66,19 @@ namespace LibroDiarioMayorWebApp.Controllers
                 new ClaimsPrincipal(claimsIdentity),
                 properties
                 );
-            UpdateUltInicio(usuario_Existe.IdUsuario);
+            _context.UpdateUltInicio(usuario_Existe.IdUsuario);
             return RedirectToAction("Index");
             
+        }
+        [HttpGet]
+        public IActionResult NewPassword(int id)
+        {
+            if (ViewData["ChPassword"] == null)
+            {
+                return View("Login");
+            }
+            ViewData["Id"] = id;
+            return View();
         }
         [Authorize]
         public IActionResult Index()
@@ -75,11 +94,6 @@ namespace LibroDiarioMayorWebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        private void UpdateUltInicio(int IdUsuario)
-        {
-            var sql = FormattableStringFactory.Create("UPDATE Usuarios SET [Ult_Inicio] = GETUTCDATE() WHERE [id_Usuario] = {0}", IdUsuario.ToString());
-            _Context.Database.ExecuteSql(sql);
         }
     }
 }

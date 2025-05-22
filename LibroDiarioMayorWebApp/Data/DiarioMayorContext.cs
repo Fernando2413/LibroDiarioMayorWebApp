@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using LibroDiarioMayorWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibroDiarioMayorWebApp.Models;
+namespace LibroDiarioMayorWebApp.Data;
 
 public partial class DiarioMayorContext : DbContext
 {
@@ -116,4 +118,19 @@ public partial class DiarioMayorContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    public void UpdateUltInicio(int IdUsuario)
+    {
+        var sql = FormattableStringFactory.Create("UPDATE Usuarios SET [ult_Inicio] = GETUTCDATE() WHERE [id_Usuario] = {0}", IdUsuario.ToString());
+        Database.ExecuteSql(sql);
+    }
+    public void ClearUltInicio(int IdUsuario)
+    {
+        var sql = FormattableStringFactory.Create("UPDATE Usuarios SET [ult_Inicio] = NULL WHERE [id_Usuario] = {0}", IdUsuario.ToString());
+        Database.ExecuteSql(sql);
+    }
+    public void UpdateClave(int id, string clave)
+    {
+        var sql = FormattableStringFactory.Create("UPDATE Usuarios SET [clave] = {0} WHERE [id_Usuario] = {1}", clave, id.ToString());
+        Database.ExecuteSql(sql);
+    }
 }

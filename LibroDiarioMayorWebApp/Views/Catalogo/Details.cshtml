@@ -13,7 +13,7 @@
             Nombre de Cuenta:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreCuenta)
+            <b>@Html.DisplayFor(model => model.NombreCuenta)</b>
         </dd>
         <dt class = "col-sm-2">
             Tipo de Cuenta
@@ -30,6 +30,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Editar" asp-route-id="@Model?.NumeroCuenta">Editar</a> |
+    <a asp-action="Edit" asp-route-id="@Model.NumeroCuenta">Editar</a> |
     <a asp-action="Index">Volver</a>
 </div>

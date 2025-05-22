@@ -9,10 +9,14 @@ using LibroDiarioMayorWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using MoreLinq.Extensions;
 using System.Data;
+using System.Runtime.CompilerServices;
+using LibroDiarioMayorWebApp.Data;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
-    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly DiarioMayorContext _context;
@@ -21,14 +25,16 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Usuarios
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Usuarios.ToListAsync());
         }
 
         // GET: Usuarios/Details/5
+        [Authorize(Roles = "Administrador, Usuario")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,12 +53,8 @@ namespace LibroDiarioMayorWebApp.Controllers
         }
 
         // GET: Usuarios/Create
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpGet]
-        public IActionResult Iniciar()
         {
             return View();
         }
@@ -74,6 +76,7 @@ namespace LibroDiarioMayorWebApp.Controllers
         }
 
         // GET: Usuarios/Edit/5
+        [Authorize(Roles = "Administrador, Usuario")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -107,6 +110,15 @@ namespace LibroDiarioMayorWebApp.Controllers
                 {
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
+                    if (usuario.IdUsuario != Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()))
+                    {
+                        _context.ClearUltInicio(usuario.IdUsuario);
+                    }
+
+                    if (id == Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()))
+                    {
+                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,8 +135,28 @@ namespace LibroDiarioMayorWebApp.Controllers
             }
             return View(usuario);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewPassword(int Id, string Clave, string ConfirmarClave)
+        {
+            if(Clave != ConfirmarClave || Clave == null || ConfirmarClave == null)
+            {
+                ViewData["ChPassword"] = true;
+                ViewData["Id"] = Id;
+                if (Clave == null || ConfirmarClave == null) { ViewData["Mensaje01"] = "Ambos campos son requeridos"; }
+                else { ViewData["Mensaje01"] = "Las contraseñas no coinciden"; };
+                return View("NewPassword");
+            }
+
+            _context.UpdateClave(Id,Clave);
+            _context.UpdateUltInicio(Id);
+            await _context.SaveChangesAsync();
+            TempData["Mensaje02"] = "Contraseña Cambiada Correctamente, Por favor inicie sesión nuevamente.";
+            return RedirectToAction("Login", "Home");
+        }
 
         // GET: Usuarios/Delete/5
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

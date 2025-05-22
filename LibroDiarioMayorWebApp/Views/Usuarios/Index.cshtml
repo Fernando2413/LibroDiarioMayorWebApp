@@ -2,34 +2,34 @@
 @model IEnumerable<LibroDiarioMayorWebApp.Models.Usuario>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usuarios";
 }
 
-<h1>Index</h1>
+<h1>Usuarios Registrados</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear Nuevo Usuario</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NombreUsuario)
+                Nombre de Usuario:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoUsuario)
+                Tipo de Usuario:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefono)
+                Teléfono:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Direccion)
+                Correo Electrónico:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Correo)
+                Dirección:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UltInicio)
+                Ultimo Inicio de Sesión:
             </th>
             <th></th>
         </tr>
@@ -56,7 +56,7 @@
                 @Html.DisplayFor(modelItem => item.UltInicio)
             </td>
                 
-                @if (item.TipoUsuario != "Admin")
+                @if (item.TipoUsuario != "Administrador")
                 {
                     <td>
 
@@ -69,7 +69,7 @@
                 else
                 {
                      <td>
-                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Details</a>
+                        <a asp-action="Details" asp-route-id="@item.IdUsuario">Detalles</a>
                     </td>
                 }
             </tr>

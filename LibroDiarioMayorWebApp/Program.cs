@@ -1,8 +1,8 @@
-using LibroDiarioMayorWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 using Microsoft.Extensions.Options;
+using LibroDiarioMayorWebApp.Data;
 
 namespace LibroDiarioMayorWebApp
 {
@@ -20,7 +20,7 @@ namespace LibroDiarioMayorWebApp
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/Home/Login";
-                options.AccessDeniedPath = "/Home/Login/";
+                options.AccessDeniedPath = "/Home/Index/";
                 options.LogoutPath = "/Home/Login/";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
             }

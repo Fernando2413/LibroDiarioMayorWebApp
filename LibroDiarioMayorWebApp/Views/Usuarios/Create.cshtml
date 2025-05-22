@@ -1,7 +1,7 @@
 ﻿@model LibroDiarioMayorWebApp.Models.Usuario
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Usuario";
 }
 
 <h1>Crear Usuario</h1>
@@ -12,27 +12,27 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario</label>
+                <label asp-for="NombreUsuario" class="control-label">Nombre de Usuario:</label>
                 <input asp-for="NombreUsuario" class="form-control d-grid mb-2" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
+                <label asp-for="Telefono" class="control-label">Teléfono:</label>
                 <input asp-for="Telefono" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
+                <label asp-for="Direccion" class="control-label">Dirección:</label>
                 <input asp-for="Direccion" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Correo" class="control-label"></label>
+                <label asp-for="Correo" class="control-label">Correo Electrónico:</label>
                 <input asp-for="Correo" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Correo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Clave" class="control-label"></label>
+                <label asp-for="Clave" class="control-label">Contraseña:</label>
                 <input asp-for="Clave" type="password" class="form-control d-grid mb-2" />
                 <span asp-validation-for="Clave" class="text-danger"></span>
             </div>
@@ -42,14 +42,14 @@
                 <input asp-for="UltInicio" type="hidden" value="" />
                 <span asp-validation-for="UltInicio" class="text-danger"></span>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {
