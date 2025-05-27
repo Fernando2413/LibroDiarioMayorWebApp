@@ -1,0 +1,118 @@
+﻿@model LibroDiarioMayorWebApp.Models.Movimiento
+@using System.Data;
+
+@{
+    ViewData["Title"] = "Eliminar Movimiento";
+
+    if (ViewData["Action"] != null)
+    {
+        if (ViewData["Action"].ToString() == "Edit" && User.IsInRole("Usuario") == true)
+        {
+            <h1>No tienes permiso para acceder a esta funcionalidad</h1>
+
+            <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+        }
+        else
+        {
+
+            DataTable catalogo = ViewData["Cuentas"] as DataTable;
+            DataTable table = ViewData["Table"] as DataTable;
+            DataTable pDatos = ViewData["pDatos"] as DataTable;
+            string Action = ViewData["Action"] as string;
+            int OGId = Convert.ToInt32(ViewData["OGId"]);
+            int idMovimiento = Convert.ToInt32(ViewData["IdMovimiento"]);
+
+
+            <h1>Eliminar Movimiento</h1>
+
+            <h3>¿Estas seguro de que deseas borrar este movimiento?</h3>
+            <div>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Numero de Cuenta:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @table.Rows[idMovimiento]["IdCuenta"]
+                    </dd>
+                    <dt class="col-sm-2">
+                        Nombre de Cuenta:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @table.Rows[idMovimiento]["NombreCuenta"]
+                    </dd>
+                    <dt class="col-sm-2">
+                        DEBE:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @table.Rows[idMovimiento]["Debe"]
+
+                    </dd>
+                    <dt class="col-sm-2">
+                        HABER:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @table.Rows[idMovimiento]["Haber"]
+                    </dd>
+                </dl>
+
+                <form asp-action="GuardarDeleteTempMovimiento" class="d-grid mb-2">
+                    <input type="hidden" name="IdMovimiento" value="@idMovimiento" />
+                    <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                    <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                    <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                    <input type="hidden" name="Action" value="@Action" />
+                    <input type="hidden" name="OGId" value="@OGId" />
+
+                    @for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                        <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                        <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                        <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                    }
+                    @for (int i = 0; i < catalogo.Rows.Count; i++)
+                    {
+                        <input name="tCatalogoNumero[][]" type="hidden" value="@catalogo.Rows[i]["NumeroCuenta"]" />
+                        <input name="tCatalogoNombre[][]" type="hidden" value="@catalogo.Rows[i]["NombreCuenta"]" />
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Eliminar" class="btn btn-danger d-grid mb-2" />
+                    </div>
+                </form>
+            </div>
+            <div>
+                <form asp-action="VolverIndexMovimientos" class="d-grid mb-2">
+                    <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                    <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                    <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                    <input type="hidden" name="Action" value="@Action" />
+                    <input type="hidden" name="OGId" value="@OGId" />
+
+                    @for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                        <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                        <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                        <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                    }
+                    @for (int i = 0; i < catalogo.Rows.Count; i++)
+                    {
+                        <input name="tCatalogoNumero[][]" type="hidden" value="@catalogo.Rows[i]["NumeroCuenta"]" />
+                        <input name="tCatalogoNombre[][]" type="hidden" value="@catalogo.Rows[i]["NombreCuenta"]" />
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Volver" class="btn btn-primary d-grid mb-2" />
+                    </div>
+                </form>
+            </div>
+        }
+    }
+    else
+    {
+        <h1>Ha ocurrido un error</h1>
+
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+
+    }
+}

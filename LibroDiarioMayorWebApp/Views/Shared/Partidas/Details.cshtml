@@ -1,0 +1,112 @@
+﻿@model LibroDiarioMayorWebApp.Models.Partida
+@using System.Data;
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Detalles de Partida";
+    DataTable table = ViewData["Table"] as DataTable;
+    DataTable pDatos = ViewData["pDatos"] as DataTable;
+}
+
+<h1>Detalles de Partida de Libro Diario</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Numero de partida:
+        </dt>
+        <dd class="col-sm-10">
+            @pDatos.Rows[0]["NumeroPartida"]
+        </dd>
+        <dt class = "col-sm-2">
+            Fecha:
+        </dt>
+        <dd class = "col-sm-10">
+            @pDatos.Rows[0]["Fecha"]
+        </dd>
+        <dt class = "col-sm-2">
+            Descripción:
+        </dt>
+        <dd class = "col-sm-10">
+            @pDatos.Rows[0]["Descripcion"]
+        </dd>
+        <dt class = "col-sm-2">
+            DEBE:
+        </dt>
+        <dd class = "col-sm-10">
+            @pDatos.Rows[0]["Debe"]
+        </dd>
+        <dt class = "col-sm-2">
+            HABER:
+        </dt>
+        <dd class = "col-sm-10">
+            @pDatos.Rows[0]["Haber"]
+        </dd>
+        <dt class="col-sm-2">
+            Ultima edición por:
+        </dt>
+        <dd class="col-sm-10">
+            @ViewData["IngresadoPor"]
+        </dd>
+    </dl>
+</div>
+
+<div>
+<h1>Movimientos de la Partida:</h1>
+<table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    N° de Cuenta:
+                </th>
+                <th>
+                    Nombre de Cuenta:
+                </th>
+                <th>
+                    DEBE
+                </th>
+                <th>
+                    HABER
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (table.Rows != null)
+            {;
+                @for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @table.Rows[i]["idCuenta"]
+                        </td>
+                        <td>
+                            @table.Rows[i]["NombreCuenta"]
+                        </td>
+                        <td>
+                            @table.Rows[i]["Debe"]
+                        </td>
+                        <td>
+                            @table.Rows[i]["Haber"]
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+    @if (User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault() == "Administrador")
+    {
+        <td>
+            <a asp-action="Edit" asp-route-id="@pDatos.Rows[0]["NumeroPartida"]">Editar</a> |
+            <a asp-action="Index">Volver</a>
+        </td>
+    }
+    else
+    {
+        <td>
+            <a asp-action="Index">Volver</a>
+        </td>
+    }
+    <div>
+</div>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,152 +8,197 @@ using Microsoft.EntityFrameworkCore;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using LibroDiarioMayorWebApp.Data;
+using System.Data;
+using System.Linq;
+using MoreLinq;
+using System.Security.Claims;
+using NuGet.Protocol;
+using Microsoft.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
-    [Authorize]
     public class MovimientosController : Controller
     {
         private readonly DiarioMayorContext _context;
+        public BLLMiscFunctions functions = new BLLMiscFunctions();
 
         public MovimientosController(DiarioMayorContext context)
         {
             _context = context;
         }
 
-        // GET: Movimientos
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Movimientos.ToListAsync());
-        }
-
-        // GET: Movimientos/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movimiento = await _context.Movimientos
-                .FirstOrDefaultAsync(m => m.IdMovimiento == id);
-            if (movimiento == null)
-            {
-                return NotFound();
-            }
-
-            return View(movimiento);
-        }
-
-        // GET: Movimientos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Movimientos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrador, Usuario")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMovimiento,IdPartida,IdCuenta,SaldoMovimiento,TipoMovimiento")] Movimiento movimiento)
+        public IActionResult NuevoMovimiento(int NumeroPartida, DateOnly Fecha, string Descripcion, string Action, int OGId, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(movimiento);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(movimiento);
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
+
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+
+            return View("Movimientos/Create");
         }
-
-        // GET: Movimientos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movimiento = await _context.Movimientos.FindAsync(id);
-            if (movimiento == null)
-            {
-                return NotFound();
-            }
-            return View(movimiento);
-        }
-
-        // POST: Movimientos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrador, Usuario")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdMovimiento,IdPartida,IdCuenta,SaldoMovimiento,TipoMovimiento")] Movimiento movimiento)
+        public IActionResult EditarMovimiento(int NumeroPartida, DateOnly Fecha, string Descripcion, int idMovimiento, string Action, int OGId, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
         {
-            if (id != movimiento.IdMovimiento)
-            {
-                return NotFound();
-            }
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(movimiento);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovimientoExists(movimiento.IdMovimiento))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(movimiento);
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+            ViewData["IdMovimiento"] = idMovimiento;
+
+            return View("Movimientos/Edit");
         }
-
-        // GET: Movimientos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Administrador, Usuario")]
+        [HttpPost]
+        public IActionResult EliminarMovimiento(int NumeroPartida, DateOnly Fecha, string Descripcion, int idMovimiento, string Action, int OGId, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
 
-            var movimiento = await _context.Movimientos
-                .FirstOrDefaultAsync(m => m.IdMovimiento == id);
-            if (movimiento == null)
-            {
-                return NotFound();
-            }
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+            ViewData["IdMovimiento"] = idMovimiento;
 
-            return View(movimiento);
+            return View("Movimientos/Delete");
         }
-
-        // POST: Movimientos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "Administrador, Usuario")]
+        [HttpPost]
+        public IActionResult VolverIndexMovimientos(int NumeroPartida, DateOnly Fecha, string Descripcion, string Action, int OGId, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
         {
-            var movimiento = await _context.Movimientos.FindAsync(id);
-            if (movimiento != null)
-            {
-                _context.Movimientos.Remove(movimiento);
-            }
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+
+            return View("Movimientos/Index");
         }
-
-        private bool MovimientoExists(int id)
+        [Authorize(Roles = "Administrador, Usuario")]
+        [HttpPost]
+        public async Task<IActionResult> GuardarTempMovimiento(int IdCuenta, decimal SaldoMovimiento, string TipoMovimiento, int NumeroPartida, DateOnly Fecha, string Descripcion, string Action, int OGId, string[] tIdPartida, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
         {
-            return _context.Movimientos.Any(e => e.IdMovimiento == id);
+            string CuentaMovida = functions.ObtenerCuentaMovida(tCatalogoNumero, tCatalogoNombre, IdCuenta);
+
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+
+            DataRow NewRow = dataTable.NewRow();
+            NewRow["IdPartida"] = NumeroPartida;
+            NewRow["IdCuenta"] = IdCuenta;
+            NewRow["NombreCuenta"] = CuentaMovida;
+            if(TipoMovimiento == "Debe")
+            {
+                NewRow["Debe"] = SaldoMovimiento;
+                NewRow["Haber"] = 0;
+            }
+            else
+            {
+                NewRow["Debe"] = 0;
+                NewRow["Haber"] = SaldoMovimiento;
+            }
+            dataTable.Rows.Add(NewRow);
+
+            DataTable dPartida = functions. LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
+
+            DataRow rPartida = dPartida.Rows[0];
+            rPartida["NumeroPartida"] = NumeroPartida;
+            rPartida["Fecha"] = Fecha;
+            rPartida["Descripcion"] = Descripcion;
+            rPartida["Debe"] = functions.DebeActual(dataTable);
+            rPartida["Haber"] = functions.HaberActual(dataTable);
+            dPartida.AcceptChanges();
+
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+
+            return View("Movimientos/Index");
+        }
+        [Authorize(Roles = "Administrador, Usuario")]
+        [HttpPost]
+        public async Task<IActionResult> GuardarEditTempMovimiento(int IdCuenta, decimal SaldoMovimiento, string TipoMovimiento, int NumeroPartida, DateOnly Fecha, string Descripcion, int idMovimiento, string Action, int OGId, string[] tIdPartida, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
+        {
+            string CuentaMovida = functions.ObtenerCuentaMovida(tCatalogoNumero, tCatalogoNombre, IdCuenta);
+
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+
+            DataRow EditRow = dataTable.Rows[idMovimiento];
+            EditRow["IdPartida"] = NumeroPartida;
+            EditRow["IdCuenta"] = IdCuenta;
+            EditRow["NombreCuenta"] = CuentaMovida;
+            if (TipoMovimiento == "Debe")
+            {
+                EditRow["Debe"] = SaldoMovimiento;
+                EditRow["Haber"] = 0;
+            }
+            else
+            {
+                EditRow["Debe"] = 0;
+                EditRow["Haber"] = SaldoMovimiento;
+            }
+            dataTable.AcceptChanges();
+
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
+
+            DataRow rPartida = dPartida.Rows[0];
+            rPartida["NumeroPartida"] = NumeroPartida;
+            rPartida["Fecha"] = Fecha;
+            rPartida["Descripcion"] = Descripcion;
+            rPartida["Debe"] = functions.DebeActual(dataTable);
+            rPartida["Haber"] = functions.HaberActual(dataTable);
+            dPartida.AcceptChanges();
+
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+
+            return View("Movimientos/Index");
+        }
+        [Authorize(Roles = "Administrador, Usuario")]
+        [HttpPost]
+        public IActionResult GuardarDeleteTempMovimiento(int NumeroPartida, DateOnly Fecha, string Descripcion, int idMovimiento, string Action, int OGId, int[] tIdCuenta, string[] tNombreCuenta, decimal[] tDebe, decimal[] tHaber, int[] tCatalogoNumero, string[] tCatalogoNombre)
+        {
+            DataTable dataTable = functions.LlenarTablaMovimientos(NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+            dataTable = functions.ActualizarTablaMovimientosIndex(dataTable, idMovimiento, NumeroPartida, tIdCuenta, tNombreCuenta, tDebe, tHaber);
+
+            DataTable dPartida = functions.LlenarTablaPartida(NumeroPartida, Fecha, Descripcion, dataTable);
+
+            DataRow rPartida = dPartida.Rows[0];
+            rPartida["NumeroPartida"] = NumeroPartida;
+            rPartida["Fecha"] = Fecha;
+            rPartida["Descripcion"] = Descripcion;
+            rPartida["Debe"] = functions.DebeActual(dataTable);
+            rPartida["Haber"] = functions.HaberActual(dataTable);
+            dPartida.AcceptChanges();
+
+            ViewData["Cuentas"] = functions.LlenarTablaCatalogo(tCatalogoNumero, tCatalogoNombre);
+            ViewData["Table"] = dataTable;
+            ViewData["pDatos"] = dPartida;
+            ViewData["Action"] = Action;
+            ViewData["OGId"] = OGId;
+
+            return View("Movimientos/Index");
         }
     }
 }

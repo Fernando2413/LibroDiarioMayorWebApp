@@ -48,7 +48,7 @@ namespace LibroDiarioMayorWebApp.Controllers
             {
                 ViewData["ChPassword"] = true;
                 ViewData["Id"] = usuario_Existe.IdUsuario;
-                return View("NewPassword");
+                return View("Home/NewPassword");
             }
             List<Claim> claims = new List<Claim>()
             {

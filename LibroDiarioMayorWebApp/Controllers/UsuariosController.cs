@@ -145,7 +145,7 @@ namespace LibroDiarioMayorWebApp.Controllers
                 ViewData["Id"] = Id;
                 if (Clave == null || ConfirmarClave == null) { ViewData["Mensaje01"] = "Ambos campos son requeridos"; }
                 else { ViewData["Mensaje01"] = "Las contraseñas no coinciden"; };
-                return View("NewPassword");
+                return View("Home/NewPassword");
             }
 
             _context.UpdateClave(Id,Clave);

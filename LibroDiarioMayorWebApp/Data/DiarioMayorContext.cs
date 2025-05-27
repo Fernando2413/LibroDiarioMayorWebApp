@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Runtime.CompilerServices;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace LibroDiarioMayorWebApp.Data;
 
@@ -49,13 +51,14 @@ public partial class DiarioMayorContext : DbContext
 
         modelBuilder.Entity<Movimiento>(entity =>
         {
-            entity.HasKey(e => e.IdMovimiento).HasName("PK__Movimien__BE8A588C26732B9C");
+            entity.HasKey(e => e.IdMovimiento).HasName("PK__tmp_ms_x__BE8A588C8586C87A");
 
-            entity.Property(e => e.IdMovimiento)
-                .ValueGeneratedNever()
-                .HasColumnName("id_Movimiento");
+            entity.Property(e => e.IdMovimiento).HasColumnName("id_Movimiento");
             entity.Property(e => e.IdCuenta).HasColumnName("id_Cuenta");
             entity.Property(e => e.IdPartida).HasColumnName("id_Partida");
+            entity.Property(e => e.NombreCuenta)
+                .HasMaxLength(250)
+                .HasColumnName("nombre_Cuenta");
             entity.Property(e => e.SaldoMovimiento)
                 .HasColumnType("money")
                 .HasColumnName("saldo_Movimiento");
@@ -81,7 +84,8 @@ public partial class DiarioMayorContext : DbContext
             entity.Property(e => e.Haber)
                 .HasColumnType("money")
                 .HasColumnName("haber");
-            entity.Property(e => e.IngresadoPor).HasColumnName("ingresado_Por");
+            entity.Property(e => e.IngresadoPor).HasColumnName("ingresado_Por")
+            .HasMaxLength(200);
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -132,5 +136,67 @@ public partial class DiarioMayorContext : DbContext
     {
         var sql = FormattableStringFactory.Create("UPDATE Usuarios SET [clave] = {0} WHERE [id_Usuario] = {1}", clave, id.ToString());
         Database.ExecuteSql(sql);
+    }
+    public void CreatePartidaMovimientos(int IdPartida, DataTable datatable, DataTable pDatos, string user)
+    {
+        var sql01 = FormattableStringFactory.Create("INSERT INTO Partidas ([numero_Partida], [fecha], [descripcion], [debe], [haber], [ingresado_Por]) VALUES ({0},{1},{2},{3},{4},{5})"
+            , pDatos.Rows[0]["NumeroPartida"], DateOnly.FromDateTime(Convert.ToDateTime(pDatos.Rows[0]["Fecha"].ToString())), pDatos.Rows[0]["Descripcion"], pDatos.Rows[0]["Debe"], pDatos.Rows[0]["Haber"], user);
+        Database.ExecuteSql(sql01);
+
+        for (int i = 0; i < datatable.Rows.Count; i++)
+        {
+            decimal saldo;
+            string tipo;
+            if (Convert.ToDecimal(datatable.Rows[i]["Debe"]) != 0)
+            {
+                saldo = Convert.ToDecimal(datatable.Rows[i]["Debe"]);
+                tipo = "DEBE";
+            }
+            else
+            {
+                saldo = Convert.ToDecimal(datatable.Rows[i]["Haber"]);
+                tipo = "HABER";
+            }
+            var sql02 = FormattableStringFactory.Create("INSERT INTO Movimientos ([id_Partida], [id_Cuenta], [nombre_Cuenta], [saldo_Movimiento], [tipo_Movimiento]) VALUES ({0},{1},{2},{3},{4})"
+                , IdPartida, datatable.Rows[i]["IdCuenta"], datatable.Rows[i]["NombreCuenta"], saldo, tipo);
+            Database.ExecuteSql(sql02);
+        }
+    }
+    public void EditPartidaMovimientos(int IdPartida, DataTable datatable, DataTable pDatos, string user, int OGId)
+    {
+        var sql01 = FormattableStringFactory.Create("DELETE FROM Movimientos WHERE [id_Partida] = {0}", OGId);
+        Database.ExecuteSql(sql01);
+
+        var sql02 = FormattableStringFactory.Create("UPDATE Partidas SET [numero_Partida] = {0}, [fecha] = {1}, [descripcion] = {2}, [debe] = {3}, [haber] ={4}, [ingresado_Por] = {5} WHERE [numero_Partida] = {6}"
+                    , pDatos.Rows[0]["NumeroPartida"], DateOnly.FromDateTime(Convert.ToDateTime(pDatos.Rows[0]["Fecha"].ToString())), pDatos.Rows[0]["Descripcion"], pDatos.Rows[0]["Debe"], pDatos.Rows[0]["Haber"], user, OGId);
+        Database.ExecuteSql(sql02);
+        for (int i = 0; i < datatable.Rows.Count; i++)
+        {
+            decimal saldo;
+            string tipo;
+            if (Convert.ToDecimal(datatable.Rows[i]["Debe"]) != 0)
+            {
+                saldo = Convert.ToDecimal(datatable.Rows[i]["Debe"]);
+                tipo = "DEBE";
+            }
+            else
+            {
+                saldo = Convert.ToDecimal(datatable.Rows[i]["Haber"]);
+                tipo = "HABER";
+            }
+            var sql03 = FormattableStringFactory.Create("INSERT INTO Movimientos ([id_Partida], [id_Cuenta], [nombre_Cuenta], [saldo_Movimiento], [tipo_Movimiento]) VALUES ({0},{1},{2},{3},{4})"
+                , IdPartida, datatable.Rows[i]["IdCuenta"], datatable.Rows[i]["NombreCuenta"], saldo, tipo);
+            Database.ExecuteSql(sql03);
+        }
+
+    }
+    public void DeletePartidaMovimientos(int Id)
+    {
+        var sql01 = FormattableStringFactory.Create("DELETE FROM Partidas WHERE [numero_Partida] = {0}", Id);
+        Database.ExecuteSql(sql01);
+
+        var sql02 = FormattableStringFactory.Create("DELETE FROM Movimientos WHERE [id_Partida] = {0}", Id);
+        Database.ExecuteSql(sql02);
+
     }
 }

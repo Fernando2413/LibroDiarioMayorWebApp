@@ -1,0 +1,124 @@
+﻿@model LibroDiarioMayorWebApp.Models.Movimiento
+@using System.Data;
+@using MoreLinq
+
+@{
+    ViewData["Title"] = "Crear Movimiento";
+
+    if (ViewData["Action"] != null)
+    {
+        if (ViewData["Action"].ToString() == "Edit" && User.IsInRole("Usuario") == true)
+        {
+            <h1>No tienes permiso para acceder a esta funcionalidad</h1>
+
+            <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+        }
+        else
+        {
+            DataTable catalogo = ViewData["Cuentas"] as DataTable;
+            DataTable table = ViewData["Table"] as DataTable;
+            DataTable pDatos = ViewData["pDatos"] as DataTable;
+            string Action = ViewData["Action"] as string;
+            int OGId = Convert.ToInt32(ViewData["OGId"]);
+
+
+
+            <h1>Crear Nuevo Movimiento</h1>
+
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="GuardarTempMovimiento" class="d-grid mb-2">
+                        <div class="form-group">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <label asp-for="IdCuenta" class="control-label">Numero de Cuenta</label>
+                            <select asp-for="IdCuenta" class="form-select d-grid mb-2">
+                                <option value="" disabled selected hidden>Seleccione...</option>
+                                @for (int i = 0; i < catalogo.Rows.Count; i++)
+                                {
+                                    <option value="@catalogo.Rows[i]["NumeroCuenta"]">@catalogo.Rows[i]["NumeroCuenta"] - @catalogo.Rows[i]["NombreCuenta"]</option>
+                                }
+                            </select>
+                            <span asp-validation-for="IdCuenta" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SaldoMovimiento" class="control-label">Saldo del Movimiento:</label>
+                            <input asp-for="SaldoMovimiento" class="form-control d-grid mb-2" />
+                            <span asp-validation-for="SaldoMovimiento" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TipoMovimiento" class="control-label">Tipo de Saldo:</label>
+                            <select asp-for="TipoMovimiento" class="form-select d-grid mb-2">
+                                <option value="" disabled selected hidden>Seleccione...</option>
+                                <option value="Debe">DEBE</option>
+                                <option value="Haber">HABER</option>
+                            </select>
+                            <span asp-validation-for="TipoMovimiento" class="text-danger"></span>
+                        </div>
+                        <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                        <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                        <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                        <input type="hidden" name="Action" value="@Action" />
+                        <input type="hidden" name="OGId" value="@OGId" />
+
+                        @for (int i = 0; i < table.Rows.Count; i++)
+                        {
+                            <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                            <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                            <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                            <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                            <input type="hidden" name="Action" value="Create" />
+                        }
+                        @for (int i = 0; i < catalogo.Rows.Count; i++)
+                        {
+                            <input name="tCatalogoNumero[][]" type="hidden" value="@catalogo.Rows[i]["NumeroCuenta"]" />
+                            <input name="tCatalogoNombre[][]" type="hidden" value="@catalogo.Rows[i]["NombreCuenta"]" />
+                        }
+
+                        <div class="form-group">
+                            <input type="submit" value="Agregar Movimiento" class="btn btn-primary d-grid mb-2" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <form asp-action="VolverIndexMovimientos" class="d-grid mb-2">
+                    <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                    <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                    <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                    <input type="hidden" name="Action" value="@Action" />
+                    <input type="hidden" name="OGId" value="@OGId" />
+
+                    @for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                        <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                        <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                        <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                        <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                    }
+                    @for (int i = 0; i < catalogo.Rows.Count; i++)
+                    {
+                        <input name="tCatalogoNumero[][]" type="hidden" value="@catalogo.Rows[i]["NumeroCuenta"]" />
+                        <input name="tCatalogoNombre[][]" type="hidden" value="@catalogo.Rows[i]["NombreCuenta"]" />
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Volver" class="btn btn-primary d-grid mb-2" />
+                    </div>
+                </form>
+            </div>
+        }
+    }
+    else
+    {
+        <h1>Ha ocurrido un error</h1>
+
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+
+    }
+}
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

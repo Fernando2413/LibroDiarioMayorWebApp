@@ -11,6 +11,8 @@ public partial class Movimiento
 
     public int IdCuenta { get; set; }
 
+    public string NombreCuenta { get; set; } = null!;
+
     public decimal SaldoMovimiento { get; set; }
 
     public string TipoMovimiento { get; set; } = null!;

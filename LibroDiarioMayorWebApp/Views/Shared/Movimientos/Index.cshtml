@@ -1,0 +1,243 @@
+﻿@using System.Data;
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Movimientos de Partida";
+    
+    if (ViewData["Action"] != null)
+    {
+        if (ViewData["Action"].ToString() == "Edit" && User.IsInRole("Usuario") == true)
+        {
+            <h1>No tienes permiso para acceder a esta funcionalidad</h1>
+
+            <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+        }
+        else
+        {
+            DataTable table = ViewData["Table"] as DataTable;
+            DataTable pDatos = ViewData["pDatos"] as DataTable;
+            DataTable Catalogo = ViewData["Cuentas"] as DataTable;
+            string Action = ViewData["Action"] as string;
+            int OGId = Convert.ToInt32(ViewData["OGId"]);
+
+
+            <h1 class="d-grid mb-2">Detalles de Partida:</h1>
+            <form asp-action="AccionEditarPartida" asp-controller="Partidas">
+                <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                <input type="hidden" name="Action" value="@Action" />
+                <input type="hidden" name="OGId" value="@OGId" />
+
+                @for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                    <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                    <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["debe"]" />
+                    <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["haber"]" />
+                }
+                @for (int i = 0; i < Catalogo.Rows.Count; i++)
+                {
+                    <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[i]["NumeroCuenta"]" />
+                    <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[i]["NombreCuenta"]" />
+                }
+
+                <input type="submit" value="Editar Partida" class="btn btn-primary d-grid mb-2" />
+            </form>
+            @if (ViewData["Mensaje01"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewData["Mensaje01"]
+                </div>
+            }
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            N° de Partida:
+                        </th>
+                        <th>
+                            Fecha:
+                        </th>
+                        <th>
+                            Descripción:
+                        </th>
+                        <th>
+                            DEBE
+                        </th>
+                        <th>
+                            HABER
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @pDatos.Rows[0]["NumeroPartida"]
+                        </td>
+                        <td>
+                            @pDatos.Rows[0]["Fecha"]
+                        </td>
+                        <td>
+                            @pDatos.Rows[0]["Descripcion"]
+                        </td>
+                        <td>
+                            @pDatos.Rows[0]["Debe"]
+                        </td>
+                        <td>
+                            @pDatos.Rows[0]["Haber"]
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h1 class="d-grid mb-2">Movimientos de Partida:</h1>
+            <form asp-action="NuevoMovimiento" asp-controller="Movimientos">
+                <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                <input type="hidden" name="Action" value="@Action" />
+                <input type="hidden" name="OGId" value="@OGId" />
+
+                @for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                    <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                    <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                    <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                }
+                @for (int i = 0; i < Catalogo.Rows.Count; i++)
+                {
+                    <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[i]["NumeroCuenta"]" />
+                    <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[i]["NombreCuenta"]" />
+                }
+
+                <input type="submit" value="Agregar Movimientos" class="btn btn-primary" />
+            </form>
+            <br>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            N° de Cuenta:
+                        </th>
+                        <th width="55%">
+                            Nombre de Cuenta:
+                        </th>
+                        <th>
+                            DEBE
+                        </th>
+                        <th>
+                            HABER
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (table.Rows != null)
+                    {
+                        ;
+                        @for (int i = 0; i < table.Rows.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @table.Rows[i]["idCuenta"]
+                                </td>
+                                <td width="55%">
+                                    @table.Rows[i]["NombreCuenta"]
+                                </td>
+                                <td>
+                                    @table.Rows[i]["Debe"]
+                                </td>
+                                <td>
+                                    @table.Rows[i]["Haber"]
+                                </td>
+                                <td class="small">
+                                    <form asp-action="EditarMovimiento" asp-controller="Movimientos" class="c-inline-form">
+                                        <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                                        <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                                        <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                                        <input type="hidden" name="Action" value="@Action" />
+                                        <input type="hidden" name="OGId" value="@OGId" />
+                                        <input name="idMovimiento" type="hidden" value="@table.Rows[i]["IdMovimiento"]" />
+
+                                        @for (int j = 0; j < table.Rows.Count; j++)
+                                        {
+                                            <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[j]["IdCuenta"]" />
+                                            <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[j]["NombreCuenta"]" />
+                                            <input name="tDebe[][]" type="hidden" value="@table.Rows[j]["Debe"]" />
+                                            <input name="tHaber[][]" type="hidden" value="@table.Rows[j]["Haber"]" />
+                                        }
+                                        @for (int j = 0; j < Catalogo.Rows.Count; j++)
+                                        {
+                                            <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[j]["NumeroCuenta"]" />
+                                            <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[j]["NombreCuenta"]" />
+                                        }
+
+                                        <input type="submit" value="Editar" class="btn btn-primary d-grid gap-2 c-inline-form" />
+                                    </form>
+
+                                    <form asp-action="EliminarMovimiento" asp-controller="Movimientos" class="c-inline-form">
+                                        <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                                        <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                                        <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                                        <input type="hidden" name="Action" value="@Action" />
+                                        <input type="hidden" name="OGId" value="@OGId" />
+                                        <input name="idMovimiento" type="hidden" value="@table.Rows[i]["IdMovimiento"]" />
+
+                                        @for (int j = 0; j < table.Rows.Count; j++)
+                                        {
+                                            <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[j]["IdCuenta"]" />
+                                            <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[j]["NombreCuenta"]" />
+                                            <input name="tDebe[][]" type="hidden" value="@table.Rows[j]["Debe"]" />
+                                            <input name="tHaber[][]" type="hidden" value="@table.Rows[j]["Haber"]" />
+                                        }
+                                        @for (int j = 0; j < Catalogo.Rows.Count; j++)
+                                        {
+                                            <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[j]["NumeroCuenta"]" />
+                                            <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[j]["NombreCuenta"]" />
+                                        }
+
+                                        <input type="submit" value="Eliminar" class="btn btn-primary d-grid gap-2 c-inline-form" />
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <form asp-action="AccionGuardarPartida" asp-controller="Partidas">
+                <input name="NumeroPartida" type="hidden" value="@pDatos.Rows[0]["NumeroPartida"]" />
+                <input name="Fecha" type="hidden" value="@pDatos.Rows[0]["Fecha"]" />
+                <input name="Descripcion" type="hidden" value="@pDatos.Rows[0]["Descripcion"]" />
+                <input name="Debe" type="hidden" value="@pDatos.Rows[0]["Debe"]" />
+                <input name="Haber" type="hidden" value="@pDatos.Rows[0]["Haber"]" />
+                <input type="hidden" name="Action" value="@Action" />
+                <input type="hidden" name="OGId" value="@OGId" />
+
+                @for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    <input name="tIdCuenta[][]" type="hidden" value="@table.Rows[i]["IdCuenta"]" />
+                    <input name="tNombreCuenta[][]" type="hidden" value="@table.Rows[i]["NombreCuenta"]" />
+                    <input name="tDebe[][]" type="hidden" value="@table.Rows[i]["Debe"]" />
+                    <input name="tHaber[][]" type="hidden" value="@table.Rows[i]["Haber"]" />
+                }
+                @for (int i = 0; i < Catalogo.Rows.Count; i++)
+                {
+                    <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[i]["NumeroCuenta"]" />
+                    <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[i]["NombreCuenta"]" />
+                }
+
+                <input type="submit" value="Guardar Partida" class="btn btn-primary d-grid mb-2" />
+            </form>
+        }
+    }
+    else
+    {
+        <h1>Ha ocurrido un error</h1>
+
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+
+    }
+
+
+}

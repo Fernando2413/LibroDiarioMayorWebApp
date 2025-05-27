@@ -1,0 +1,83 @@
+﻿@model IEnumerable<LibroDiarioMayorWebApp.Models.Partida>
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Libro Diario";
+}
+@if (ViewData["Mensaje01"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData["Mensaje01"]
+    </div>
+}
+<h1>Partidas de Libro Diario</h1>
+
+<p>
+    <a asp-action="Create" asp-controller="Partidas">Crear Nueva Partida</a>
+</p>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                N° de Partida:
+            </th>
+            <th>
+                Fecha:
+            </th>
+            <th>
+                Descripción:
+            </th>
+            <th>
+                DEBE:
+            </th>
+            <th>
+                HABER:
+            </th>
+            <th>
+                Ultima Edición Por:
+            </th>
+            <th>
+                Acciones:
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) { 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroPartida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Debe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Haber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IngresadoPor)
+            </td>
+
+            @if (User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault() == "Administrador")
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.NumeroPartida">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.NumeroPartida">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.NumeroPartida">Eliminar</a>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.NumeroPartida">Detalles</a>
+                </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

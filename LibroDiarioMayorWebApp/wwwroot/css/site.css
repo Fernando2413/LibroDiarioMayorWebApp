@@ -185,4 +185,25 @@ select:focus {
 .dropdown:hover .dropdown-content {
     display: block flow;
 }
+.table-bordered {
+    border: 2px solid rgb(170, 255, 170);
+}
+td, th {
+    border: 2px solid rgb(170, 255, 170) !important;
+
+
+}
+th {
+    color: rgb(170, 255, 170) !important;
+    background-color: rgb(0, 64, 0) !important;
+}
+
+.c-inline-form{
+    display: inline !important;
+}
+
+.table {
+    margin: 10px, 0px, 10px, 0px;
+}
+
 

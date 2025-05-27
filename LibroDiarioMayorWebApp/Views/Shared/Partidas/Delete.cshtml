@@ -1,0 +1,71 @@
+﻿@model LibroDiarioMayorWebApp.Models.Partida
+@using System.Data;
+
+@{
+    ViewData["Title"] = "Eliminar Partida";
+
+    if (User.IsInRole("Usuario") == true)
+    {
+        <h1>No tienes permiso para acceder a esta funcionalidad</h1>
+
+        <a asp-controller="Home" asp-action="Index">Volver a Inicio</a>
+    }
+    else
+    {
+        DataTable table = ViewData["Table"] as DataTable;
+        DataTable pDatos = ViewData["pDatos"] as DataTable;
+        int OGId = Convert.ToInt32(ViewData["OGId"]);
+        <h1>Eliminar Partida de Libro Diario</h1>
+
+        <h3>¿Estas seguro de que deseas eliminar esta Partida del Libro Diario?</h3>
+        <div>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    Numero de partida:
+                </dt>
+                <dd class="col-sm-10">
+                    @pDatos.Rows[0]["NumeroPartida"]
+                </dd>
+                <dt class="col-sm-2">
+                    Fecha:
+                </dt>
+                <dd class="col-sm-10">
+                    @pDatos.Rows[0]["Fecha"]
+                </dd>
+                <dt class="col-sm-2">
+                    Descripción:
+                </dt>
+                <dd class="col-sm-10">
+                    @pDatos.Rows[0]["Descripcion"]
+                </dd>
+                <dt class="col-sm-2">
+                    DEBE:
+                </dt>
+                <dd class="col-sm-10">
+                    @pDatos.Rows[0]["Debe"]
+                </dd>
+                <dt class="col-sm-2">
+                    HABER:
+                </dt>
+                <dd class="col-sm-10">
+                    @pDatos.Rows[0]["Haber"]
+                </dd>
+                <dt class="col-sm-2">
+                    Ultima edición por:
+                </dt>
+                <dd class="col-sm-10">
+                    @ViewData["IngresadoPor"]
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" name="id" value="@OGId" />
+                <input type="submit" value="Eliminar" class="btn btn-danger d-grid mb-2" /> |
+                <a asp-action="Index">Volver</a>
+            </form>
+        </div>
+
+    }
+
+}

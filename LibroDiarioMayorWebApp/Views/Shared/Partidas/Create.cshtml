@@ -1,0 +1,55 @@
+﻿@model LibroDiarioMayorWebApp.Models.Partida
+@using System.Data;
+
+@{
+    ViewData["Title"] = "Crear Partida";
+    DataTable Catalogo = ViewData["Cuentas"] as DataTable;
+
+    string Action = ViewData["Action"] as string;
+}
+
+<h1>Crear Nueva Partida de Libro Diario</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AccionNuevaPartida">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NumeroPartida" class="control-label"> Numero de Partida:</label>
+                <input asp-for="NumeroPartida" class="form-control d-grid mb-2" />
+                <span asp-validation-for="NumeroPartida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label">Fecha: </label>
+                <input asp-for="Fecha" type="date" class="form-control d-grid mb-2" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label">Descripción:</label>
+                <input asp-for="Descripcion" class="form-control d-grid mb-2" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" name="Action" value="Create" />
+            @for (int i = 0; i < Catalogo.Rows.Count; i++)
+            {
+                <input name="tCatalogoNumero[][]" type="hidden" value="@Catalogo.Rows[i]["NumeroCuenta"]" />
+                <input name="tCatalogoNombre[][]" type="hidden" value="@Catalogo.Rows[i]["NombreCuenta"]" />
+            }
+                <input type="hidden" name="Action" value="Create" />
+
+            <div class="form-group">
+                <input type="submit" value="Guardar e ir a Movimientos" class="btn btn-primary d-grid mb-2" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Partidas" asp-action="Index">Volver a Libro Diario</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
