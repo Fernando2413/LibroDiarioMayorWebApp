@@ -1,0 +1,281 @@
+﻿@using System.Data;
+@{
+    ViewData["Title"] = "Libro Mayor";
+
+    int FechaMayor = 2020;
+    if (ViewData["Fecha"] != null)
+    {
+        FechaMayor = Convert.ToInt32(ViewData["Fecha"]);
+    }
+}
+
+<h1>Libro Mayor</h1>
+
+<h4>Seleccione el año de libro mayor a visualizar</h4>
+<div class="row">
+	<div class="col-md-4">
+		<form action="Visualize">
+			<div class="form-group">
+				<label for="FechaMayor" class="control-label">Año de Libro Mayor</label>
+				<input name="FechaMayor" type="number" min="1900" max="9999" step="1" value="@FechaMayor" class="form-control d-grid mb-2" />
+
+				<input type="submit" value="Visualizar" class="btn btn-primary"/>
+			</div>
+		</form>
+        <br />
+	</div>
+</div>
+
+@if(ViewData["CuentasAMostrar"] != null)
+{
+    int added = 1;
+    DataTable[] CuentasAMostrar = ViewData["CuentasAMostrar"] as DataTable[];
+    if(CuentasAMostrar[0].Rows.Count != 0)
+    {
+        <input type="button" onclick="CambiarVista()" id="BotonVista" class="btn btn-primary" value="Ver Balance de Comprobación" />
+
+        //Vista Graficos de Mayor
+
+        <div id="GraficosMayor">
+            <h1>GRAFICOS DE MAYOR AÑO @FechaMayor</h1>
+            @for (int i = 0; i < CuentasAMostrar.Length; i++)
+            {
+                if (CuentasAMostrar[i].Rows.Count != 0)
+                {
+                    decimal TotalDebe = 0;
+                    decimal TotalHaber = 0;
+                    for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+                    {
+                        TotalDebe += Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]);
+                        TotalHaber += Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]);
+                    }
+                    if (added % 2 != 0)
+                    {
+                        @Html.Raw("<div class='container'>")
+                        @Html.Raw("<div class='row'>")
+                    }
+
+                    <table class="table table-bordered table-striped col">
+                        <thead>
+                            <tr>
+                                <th colspan="2" style="text-align:center">
+                                    <p>@CuentasAMostrar[i].Rows[0]["IdCuenta"] - @CuentasAMostrar[i].Rows[0]["NombreCuenta"].ToString().ToUpper()</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+                            {
+                                <tr>
+                                    <td align="right" width="33%">
+                                        <a style="float:left">(@CuentasAMostrar[i].Rows[j]["IdPartida"])</a>      <a style="float:right">@CuentasAMostrar[i].Rows[j]["Debe"]</a>
+                                    </td>
+                                    <td align="left" width="33%">
+                                        <a style="float:left">@CuentasAMostrar[i].Rows[j]["Haber"]</a>          <a style="float:right">(@CuentasAMostrar[i].Rows[j]["IdPartida"])</a>
+                                    </td>
+                                </tr>
+                            }
+                            @if (CuentasAMostrar[i].Rows.Count < 10)
+                            {
+                                for (int j = CuentasAMostrar[i].Rows.Count; j < 10; j++)
+                                {
+                                    <tr>
+                                        <td align="right">
+                                            -
+                                        </td>
+                                        <td align="left">
+                                            -
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <th colspan="2">
+                                </th>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    <b>@TotalDebe</b>
+                                </td>
+                                <td align="left">
+                                    <b>@TotalHaber</b>
+                                </td>
+                            </tr>
+                            @if (TotalDebe > TotalHaber)
+                            {
+                                <tr>
+                                    <td align="right">
+                                        <b>@(TotalDebe - TotalHaber)</b>
+                                    </td>
+                                    <td align="left">
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="right">
+                                    </td>
+                                    <td align="left">
+                                        <b>@(TotalHaber - TotalDebe)</b>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    <br />
+                    if (added % 2 == 0)
+                    {
+                        @Html.Raw("</div>")
+                        @Html.Raw("</div>")
+                    }
+                    added++;
+                }
+            }
+            @if (added % 2 == 0)
+            {
+                <table class="col"></table>
+                <br />
+                @Html.Raw("</div>")
+                @Html.Raw("</div>")
+            }
+        </div>
+
+        //Vista Balance de Comprobación
+
+        <div hidden id="BalanceComprobacion">
+            @{
+                decimal ComprobacionTotalDebe = 0;
+                decimal ComprobacionTotalHaber = 0;
+                decimal TotalSaldoDeudor = 0;
+                decimal TotalSaldoAcreedor = 0;
+            }
+            <h1>BALANCE DE COMPROBACIÓN AÑO @FechaMayor</h1>
+            <table class="table table-bordered table-striped col">
+                <thead>
+                    <tr>
+                        <th rowspan="2">
+                            N° CUENTA:
+                        </th>
+                        <th rowspan="2">
+                            NOMBRE CUENTA:
+                        </th>
+                        <th colspan="2" style="text-align:center">
+                            MOVIMIENTOS
+                        </th>
+                        <th colspan="2" style="text-align:center">
+                            SALDOS
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:center">
+                            DEBE
+                        </th>
+                        <th style="text-align:center">
+                            HABER
+                        </th>
+                        <th style="text-align:center">
+                            DEUDOR
+                        </th>
+                        <th style="text-align:center">
+                            ACREEDOR
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < CuentasAMostrar.Length; i++)
+                    {
+                        decimal TotalCuentaDebe = 0;
+                        decimal TotalCuentaHaber = 0;
+                        @for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+                        {
+                             TotalCuentaDebe += Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]);
+                             TotalCuentaHaber += Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]);
+                        }
+                        if (CuentasAMostrar[i].Rows.Count != 0)
+                        {
+                            <tr>
+                                <td>
+                                    @CuentasAMostrar[i].Rows[0][2]
+                                </td>
+                                <td>
+                                    @CuentasAMostrar[i].Rows[0][3]
+                                </td>
+                                <td>
+                                    @TotalCuentaDebe
+                                </td>
+                                <td>
+                                    @TotalCuentaHaber
+                                </td>
+
+                                @if (TotalCuentaDebe > TotalCuentaHaber)
+                                {
+                                    <td>
+                                        @(TotalCuentaDebe - TotalCuentaHaber)
+                                    </td>
+                                    <td>
+                                        0
+                                    </td>
+                                    TotalSaldoDeudor += (TotalCuentaDebe - TotalCuentaHaber);
+                                }
+
+                                else
+                                {
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        @(TotalCuentaHaber - TotalCuentaDebe)
+                                    </td>
+                                    TotalSaldoAcreedor += (TotalCuentaHaber - TotalCuentaDebe);
+                                }
+                            </tr>
+                            ComprobacionTotalDebe += TotalCuentaDebe;
+                            ComprobacionTotalHaber += TotalCuentaHaber;
+                        }
+                    }
+                    <tr>
+                        <th colspan="2" style="text-align:right">
+                            TOTAL:
+                        </th>
+                        <th>
+                            @ComprobacionTotalDebe
+                        </th>
+                        <th>
+                            @ComprobacionTotalHaber
+                        </th>
+                        <th>
+                            @TotalSaldoDeudor
+                        </th>
+                        <th>
+                            @TotalSaldoAcreedor
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No hay partidas de diario para este año.</p>
+    }
+}
+<script>
+    function CambiarVista()
+    {
+        if (document.getElementById("GraficosMayor").hidden === false) 
+        {
+            document.getElementById("BotonVista").value = "Ver Graficos de Mayor";
+            document.getElementById("GraficosMayor").hidden = true;
+            document.getElementById("BalanceComprobacion").hidden = false;
+        }
+        else {
+            document.getElementById("BotonVista").value = "Ver Balance de Comprobación";
+            document.getElementById("GraficosMayor").hidden = false;
+            document.getElementById("BalanceComprobacion").hidden = true;
+        }
+    }
+
+
+</script>

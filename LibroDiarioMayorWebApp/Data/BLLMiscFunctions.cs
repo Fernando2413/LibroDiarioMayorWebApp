@@ -1,5 +1,7 @@
 ﻿using LibroDiarioMayorWebApp.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
+using MoreLinq;
 
 namespace LibroDiarioMayorWebApp.Data
 {
@@ -147,5 +149,114 @@ namespace LibroDiarioMayorWebApp.Data
             return CuentaMovida;
         }
 
-    }
+
+
+		public DataTable NuevaTablaDBPartida()
+		{
+			DataTable DBPartida = new DataTable();
+			DBPartida.Columns.Add("NumeroPartida");
+			DBPartida.Columns.Add("Fecha");
+			DBPartida.Columns.Add("Descripcion");
+			DBPartida.Columns.Add("Debe").DefaultValue = 0; ;
+			DBPartida.Columns.Add("Haber").DefaultValue = 0;
+            DBPartida.Columns.Add("IngresadoPor");
+
+			return DBPartida;
+		}
+
+		public DataTable NuevaTablaDBMovimientos()
+		{
+			DataTable DBMovimiento = new DataTable();
+			DBMovimiento.Columns.Add("IdMovimiento");
+			DBMovimiento.Columns.Add("IdPartida");
+			DBMovimiento.Columns.Add("IdCuenta");
+			DBMovimiento.Columns.Add("NombreCuenta");
+			DBMovimiento.Columns.Add("Debe").DefaultValue = 0;
+			DBMovimiento.Columns.Add("Haber").DefaultValue = 0;
+
+			return DBMovimiento;
+		}
+
+        public DataTable[] ObtenerArrayTablasMovimientos(int FechaMayor, DataTable AllCuentas, DataTable AllPartidas, DataTable AllMovimientos)
+        {
+            DataTable Partidas = NuevaTablaDBPartida();
+            DataTable Movimientos = NuevaTablaDBMovimientos();
+
+            string[] NombresCuentas = new string[AllCuentas.Rows.Count];
+
+            DataTable[] MovimientosCuentasAMostrar = new DataTable[AllCuentas.Rows.Count];
+
+            for (int i = 0; i < AllCuentas.Rows.Count; i++)
+            {
+                NombresCuentas[i] = AllCuentas.Rows[i][1].ToString();
+            }
+
+            for (int i = 0; i < AllPartidas.Rows.Count; i++)
+            {
+                if (Convert.ToUInt32(DateOnly.Parse(AllPartidas.Rows[i][1].ToString()).Year) == FechaMayor)
+                {
+                    DataRow row = Partidas.NewRow();
+                    row["NumeroPartida"] = AllPartidas.Rows[i][0];
+                    row["Fecha"] = AllPartidas.Rows[i][1];
+                    row["Descripcion"] = AllPartidas.Rows[i][2];
+                    row["Debe"] = AllPartidas.Rows[i][3];
+                    row["Haber"] = AllPartidas.Rows[i][4];
+                    row["IngresadoPor"] = AllPartidas.Rows[i][5];
+                    Partidas.Rows.Add(row);
+                    Partidas.AcceptChanges();
+                }
+            }
+
+            for (int i = 0; i < Partidas.Rows.Count; i++)
+            {
+                for (int j = 0; j < AllMovimientos.Rows.Count; j++)
+                {
+                    if (Convert.ToInt32(Partidas.Rows[i][0]) == Convert.ToInt32(AllMovimientos.Rows[j][1]))
+                    {
+                        DataRow row = Movimientos.NewRow();
+                        row["IdMovimiento"] = AllMovimientos.Rows[j][0];
+                        row["IdPartida"] = AllMovimientos.Rows[j][1];
+                        row["IdCuenta"] = AllMovimientos.Rows[j][2];
+                        row["NombreCuenta"] = AllMovimientos.Rows[j][3];
+
+                        if (AllMovimientos.Rows[j][5].ToString() == "DEBE")
+                        {
+                            row["Debe"] = AllMovimientos.Rows[j][4];
+                        }
+                        else
+                        {
+                            row["Haber"] = AllMovimientos.Rows[j][4];
+                        }
+
+                        Movimientos.Rows.Add(row);
+                        Movimientos.AcceptChanges();
+                    }
+                }
+            }
+            for (int i = 0; i < NombresCuentas.Length; i++)
+            {
+                DataTable MovimientosCuentaIndividual = NuevaTablaDBMovimientos();
+
+                for (int j = 0; j < Movimientos.Rows.Count; j++)
+                {
+                    if (NombresCuentas[i] == Movimientos.Rows[j][3].ToString())
+                    {
+                        DataRow row = MovimientosCuentaIndividual.NewRow();
+                        row["IdMovimiento"] = Movimientos.Rows[j][0];
+                        row["IdPartida"] = Movimientos.Rows[j][1];
+                        row["IdCuenta"] = Movimientos.Rows[j][2];
+                        row["NombreCuenta"] = Movimientos.Rows[j][3];
+                        row["Debe"] = Movimientos.Rows[j][4];
+                        row["Haber"] = Movimientos.Rows[j][5];
+
+                        MovimientosCuentaIndividual.Rows.Add(row);
+                        MovimientosCuentaIndividual.AcceptChanges();
+                    }
+                }
+                MovimientosCuentasAMostrar[i] = MovimientosCuentaIndividual;
+
+            }
+            return MovimientosCuentasAMostrar;
+        }
+	}
 }
