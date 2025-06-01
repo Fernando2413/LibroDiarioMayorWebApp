@@ -14,7 +14,7 @@
 <h4>Seleccione el año de libro mayor a visualizar</h4>
 <div class="row">
 	<div class="col-md-4">
-		<form action="Visualize">
+		<form action="GenerarLibroMayor">
 			<div class="form-group">
 				<label for="FechaMayor" class="control-label">Año de Libro Mayor</label>
 				<input name="FechaMayor" type="number" min="1900" max="9999" step="1" value="@FechaMayor" class="form-control d-grid mb-2" />
@@ -30,7 +30,7 @@
 {
     int added = 1;
     DataTable[] CuentasAMostrar = ViewData["CuentasAMostrar"] as DataTable[];
-    if(CuentasAMostrar[0].Rows.Count != 0)
+    if( CuentasAMostrar.Length != 0)
     {
         <input type="button" onclick="CambiarVista()" id="BotonVista" class="btn btn-primary" value="Ver Balance de Comprobación" />
 

@@ -16,10 +16,16 @@
                 N° de Cuenta:
             </th>
             <th>
-                Nombre de Cuenta:
+                Grupo de Cuenta:
             </th>
             <th>
                 Tipo de cuenta:
+            </th>
+            <th>
+                Clasificación de Cuenta:
+            </th>
+            <th>
+                Nombre de Cuenta:
             </th>
             <th>
                 Se incluye en:
@@ -36,10 +42,16 @@
                 @Html.DisplayFor(modelItem => item.NumeroCuenta)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NombreCuenta)
+                @Html.DisplayFor(modelItem => item.GrupoCuenta)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TipoCuenta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClasificacionCuenta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreCuenta)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IncluidaEn)

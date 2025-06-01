@@ -44,9 +44,18 @@ public partial class DiarioMayorContext : DbContext
             entity.Property(e => e.NombreCuenta)
                 .HasMaxLength(250)
                 .HasColumnName("nombre_Cuenta");
+            entity.Property(e => e.GrupoCuenta)
+                .HasMaxLength(20)
+                .HasColumnName("grupo_Cuenta");
             entity.Property(e => e.TipoCuenta)
-                .HasMaxLength(70)
+                .HasMaxLength(45)
                 .HasColumnName("tipo_Cuenta");
+            entity.Property(e => e.ClasificacionCuenta)
+                .HasMaxLength(70)
+                .HasColumnName("clasificacion_Cuenta");
+            entity.Property(e => e.CR)
+                .HasDefaultValue(0)
+                .HasColumnName("cr");
         });
 
         modelBuilder.Entity<Movimiento>(entity =>

@@ -28,8 +28,8 @@
                 <span asp-validation-for="NombreCuenta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TipoCuenta" class="control-label ">Tipo de Cuenta:</label>
-                <select asp-for="TipoCuenta" class="form-select d-grid mb-2">
+                <label asp-for="GrupoCuenta" class="control-label ">Grupo de Cuenta:</label>
+                <select asp-for="GrupoCuenta" class="form-select d-grid mb-2" id="GrupoCuenta">
                     <option value="" disabled selected hidden>Seleccione...</option>
                     <option value="ACTIVO">ACTIVO</option>
                     <option value="PASIVO">PASIVO</option>
@@ -37,8 +37,105 @@
                     <option value="CUENTA DEUDORA">CUENTA DE RESULTADO DEUDORA</option>
                     <option value="CUENTA ACREEDORA">CUENTA DE RESULTADO ACREEDORA</option>
                 </select>
+                <span asp-validation-for="GrupoCuenta" class="text-danger"></span>
+            </div>
+            <div class="form-group CRCheck" style="display:none">
+                <label asp-for="CR" class="control-label" class="CRCheck">Cuenta de CR:</label>
+                <input asp-for="CR" class="form-check d-grid mb-2 CRCheck" id="CRCheck"/>
+                <span asp-validation-for="CR" class="text-danger CRCheck"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoCuenta" class="control-label ">Tipo de Cuenta:</label>
+                <select asp-for="TipoCuenta" class="form-select d-grid mb-2" id="TipoCuenta">
+                    <option value="" disabled selected hidden>Seleccione...</option>
+
+                    <!---Separados para facilidad de lectura en el editor--->
+
+                    <option value="ACTIVO CORRIENTE"                    class="Activo"      >ACTIVO CORRIENTE</option>
+                    <option value="ACTIVO NO CORRIENTE"                 class="Activo"      >ACTIVO NO CORRIENTE</option>
+
+                    <option value="PASIVO CORRIENTE"                    class="Pasivo"      >PASIVO CORRIENTE</option>
+                    <option value="PASIVO NO CORRIENTE"                 class="Pasivo"      >PASIVO NO CORRIENTE</option>
+
+                    <option value="CAPITAL SOCIAL"                      class="Capital"     >CAPITAL SOCIAL</option>
+                    <option value="RESERVAS"                            class="Capital"     >RESERVAS</option>
+                    <option value="UTILIDADES"                          class="Capital"     >UTILIDADES</option>
+
+                    <option value="COSTOS DE VENTA Y DE PRODUCCION"     class="Deudora"     >COSTOS DE VENTA Y DE PRODUCCION</option>
+                    <option value="GASTOS DE OPERACION ORDINARIAS"      class="Deudora"     >GASTOS DE OPERACION ORDINARIAS</option>
+                    <option value="GASTOS DE NO OPERACION"              class="Deudora"     >GASTOS DE NO OPERACION</option>
+
+                    <option value="INGRESOS DE OPERACIONES ORDINARIAS"  class="Acreedora"   >INGRESOS DE OPERACIONES ORDINARIAS</option>
+                    <option value="INGRESOS NO OPERACIONALES"           class="Acreedora"   >INGRESOS NO OPERACIONALES</option>
+
+                </select>
                 <span asp-validation-for="TipoCuenta" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ClasificacionCuenta" class="control-label ">Clasificación de Cuenta:</label>
+                <select asp-for="ClasificacionCuenta" class="form-select d-grid mb-2" id="ClasificacionCuenta">
+                    <option value="" disabled selected hidden>Seleccione...</option>
+
+                    <!---Separados para facilidad de lectura en el editor--->
+
+                    <!--Opciones ACTIVO-->
+
+                    <option value="EFECTIVO Y EQUIVALENTE"                      class="Activo-Corriente"        >EFECTIVO Y EQUIVALENTE</option>
+                    <option value="CUENTAS Y DOCUMENTOS POR COBRAR"             class="Activo-Corriente"        >CUENTAS Y DOCUMENTOS POR COBRAR</option>
+                    <option value="INVENTARIO"                                  class="Activo-Corriente"        >INVENTARIO</option>
+                    <option value="PAGOS ANTICIPADOS"                           class="Activo-Corriente"        >PAGOS ANTICIPADOS</option>
+                    <option value="INVERSIONES EN PROPIEDAD"                    class="Activo-Corriente"        >INVERSIONES EN PROPIEDAD</option>
+
+                    <option value="PROPIEDAD PLANTA Y EQUIPO"                   class="Activo-No-Corriente"     >PROPIEDAD PLANTA Y EQUIPO</option>
+                    <option value="CPC - ARRENDAMIENTO FINANCIERO A LP"         class="Activo-No-Corriente"     >CUENTAS POR COBRAR - ARRENDAMIENTO FINANCIERO A LP</option>
+                    <option value="IMPUESTO SOBRE LA RENTA"                     class="Activo-No-Corriente"     >IMPUESTOS SOBRE LA RENTA</option>
+                    <option value="INVERSIONES PERMANENTES"                     class="Activo-No-Corriente"     >INVERSIONES PERMANENTES</option>
+                    <option value="ACTIVOS BIOLOGICOS"                          class="Activo-No-Corriente"     >ACTIVOS BIOLOGICOS</option>
+                    <option value="ACTIVOS INTANGIBLES"                         class="Activo-No-Corriente"     >ACTIVOS INTANGIBLES</option>
+
+                    <!--Opciones PASIVO-->
+
+                    <option value="PRESTAMOS Y SOBREGIROS BAMCARIOS"            class="Pasivo-Corriente"        >PRESTAMOS Y SOBREGIROS BANCARIOS</option>
+                    <option value="CUENTAS Y DOCUMENTOS POR PAGAR"              class="Pasivo-Corriente"        >CUENTAS Y DOCUMENTOS POR PAGAR</option>
+
+                    <option value="PRESTAMOS POR PAGAR A LP"                    class="Pasivo-No-Corriente"     >PRESTAMOS POR PAGAR A LP</option>
+                    <option value="OBLIGACIONES POR ARRENDAMIENTO FINANCIERO"   class="Pasivo-No-Corriente"     >OBLIGACIONES POR ARRENDAMIENTO FINANCIERO</option>
+                    <option value="DOCUMENTOS POR PAGAR A LP"                   class="Pasivo-No-Corriente"     >DOCUMENTOS POR PAGAR A LP</option>
+                    <option value="ANTICIPO Y GARANTIA DE CLIENTE"              class="Pasivo-No-Corriente"     >ANTICIPO Y GARANTIA DE CLIENTE</option>
+                    <option value="OTROS PASIVOS NO CORRIENTES"                 class="Pasivo-No-Corriente"     >OTROS PASIVOS NO CORRIENTES</option>
+
+                    <!--Opciones CAPITAL-->
+
+                    <option value="CAPITAL SOCIAL SUSCRITO"                     class="Capital-Social"          >CAPITAL SOCIAL SUSCRITO</option>
+
+                    <option value="UTILIDADES RESTRINGIDAS"                     class="Reservas"                >UTILIDADES RESTRINGIDAS</option>
+
+                    <option value="UTILIDADES POR DISTRIBUIR"                   class="Utilidades"              >UTILIDADES POR DISTRIBUIR</option>
+
+                    <!--Opciones Cuenta Deudora-->
+
+                    <option value="COSTO DE VENTA DE BIENES"                    class="Costos-Venta-Produccion" >COSTO DE VENTA DE BIENES</option>
+                    <option value="COSTOS DE PRODUCCION"                        class="Costos-Venta-Produccion" >COSTOS DE PRODUCCION</option>
+                    <option value="COMPRAS"                                     class="Costos-Venta-Produccion" >COMPRAS</option>
+                    <option value="DEVOLUCIONES Y REBAJAS SOBRE VENTAS"         class="Costos-Venta-Produccion" >DEVOLUCIONES Y REBAJAS SOBRE VENTAS</option>
+
+                    <option value="GASTOS DE OPERACION"                         class="Gastos-Operacion"        >GASTOS DE OPERACION</option>
+
+                    <option value="GASTOS FINANCIEROS"                          class="Gastos-No-Operacion"     >GASTOS FINANCIEROS</option>
+                    <option value="GASTOS EXTRAORDINARIOS"                      class="Gastos-No-Operacion"     >GASTOS EXTRAORDINARIOS</option>
+
+                    <!--Opciones Cuenta Acreedora-->
+
+                    <option value="VENTAS DE BIENES Y SERVICIOS"                class="Ingresos-Ordinarios"     >VENTAS DE BIENES Y SERVICIOS</option>
+                    <option value="DEVOLUCIONES Y REBAJAS SOBRE COMPRAS"        class="Ingresos-Ordinarios"     >DEVOLUCIONES Y REBAJAS SOBRE COMPRAS</option>
+
+                    <option value="INGRESOS DE NO OPERACION"                    class="Ingresos-No-Operacion"   >INGRESOS DE NO OPERACION</option>
+                    <option value="INGRESOS EXTRAORDINARIOS"                    class="Ingresos-No-Operacion"   >INGRESOS EXTRAORDINARIOS</option>
+                    <option value="OTROS INGRESOS DE NO OPERACION"              class="Ingresos-No-Operacion"   >OTROS INGRESOS DE NO OPERACION</option>
+                </select>
+                <span asp-validation-for="ClasificacionCuenta" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="IncluidaEn" class="control-label">Se incluira en:</label>
                 <select asp-for="IncluidaEn" class="form-select d-grid mb-2">
@@ -57,6 +154,290 @@
 <div>
     <a asp-action="Index">Volver</a>
 </div>
+
+<script>
+    window.onload = function () {
+        document.getElementById('GrupoCuenta').addEventListener('change', function () {
+            switch (this.value) {
+                case "ACTIVO" :
+                    for (let el of document.getElementsByClassName('Activo')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'block';
+                    document.getElementById('TipoCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    HideClasificacionCuenta();
+                break
+                case "PASIVO" :
+                    for (let el of document.getElementsByClassName('Activo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Capital')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'none';
+                    document.getElementById("CRCheck").checked = false;
+                    document.getElementById('TipoCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    HideClasificacionCuenta();
+                break
+                case 'CAPITAL' :
+                    for (let el of document.getElementsByClassName('Activo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'none';
+                    document.getElementById("CRCheck").checked = false;
+                    document.getElementById('TipoCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    HideClasificacionCuenta();
+                break
+                case 'CUENTA DEUDORA':
+                    for (let el of document.getElementsByClassName('Activo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'none';
+                    document.getElementById("CRCheck").checked = false;
+                    document.getElementById('TipoCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    HideClasificacionCuenta();
+                break
+                case 'CUENTA ACREEDORA':
+                    for (let el of document.getElementsByClassName('Activo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'none';
+                    document.getElementById("CRCheck").checked = false;
+                    document.getElementById('TipoCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    HideClasificacionCuenta();
+                break
+            }
+            
+        }, false)
+
+        //Segundo Formulario
+
+        document.getElementById('TipoCuenta').addEventListener('change', function () {
+            switch (this.value) {
+                case "ACTIVO CORRIENTE":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "ACTIVO NO CORRIENTE":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "PASIVO CORRIENTE":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "PASIVO NO CORRIENTE":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "CAPITAL SOCIAL":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "RESERVAS":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "UTILIDADES":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "COSTOS DE VENTA Y DE PRODUCCION":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "GASTOS DE OPERACION ORDINARIAS":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "GASTOS DE NO OPERACION":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "INGRESOS DE OPERACIONES ORDINARIAS":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'block';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+                case "INGRESOS NO OPERACIONALES":
+                    for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+                    for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'block';
+                    document.getElementById('ClasificacionCuenta').getElementsByTagName('option')[0].selected = 'selected'
+                    break
+            }
+
+        }, false)
+        function HideTipoCuenta(){
+            for (let el of document.getElementsByClassName('Activo')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Pasivo')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Capital')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Deudora')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Acreedora')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('CRCheck')) el.style.display = 'none';
+            document.getElementById("CRCheck").checked = false;
+        }
+        function HideClasificacionCuenta(){
+            for (let el of document.getElementsByClassName('Activo-Corriente')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Activo-No-Corriente')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Pasivo-Corriente')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Pasivo-No-Corriente')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Capital-Social')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Reservas')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Utilidades')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Costos-Venta-Produccion')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Gastos-Operacion')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Gastos-No-Operacion')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Ingresos-Ordinarios')) el.style.display = 'none';
+            for (let el of document.getElementsByClassName('Ingresos-No-Operacion')) el.style.display = 'none';
+        }
+
+        HideTipoCuenta();
+        HideClasificacionCuenta();
+
+    };
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

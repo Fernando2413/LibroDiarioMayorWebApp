@@ -68,7 +68,7 @@ namespace LibroDiarioMayorWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumeroCuenta,NombreCuenta,TipoCuenta,IncluidaEn")] Catalogo catalogo)
+        public async Task<IActionResult> Create([Bind("NumeroCuenta,NombreCuenta,GrupoCuenta,TipoCuenta,ClasificacionCuenta,IncluidaEn,CR")] Catalogo catalogo)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace LibroDiarioMayorWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("NumeroCuenta,NombreCuenta,TipoCuenta,IncluidaEn")] Catalogo catalogo)
+        public async Task<IActionResult> Edit(int id, [Bind("NumeroCuenta,NombreCuenta,GrupoCuenta,TipoCuenta,ClasificacionCuenta,IncluidaEn,CR")] Catalogo catalogo)
         {
             if (id != catalogo.NumeroCuenta)
             {

@@ -209,3 +209,8 @@ th {
 .nav-link:hover, .layout-nav:hover{
     opacity:50% !important;
 }
+
+input[type=checkbox]{
+    accent-color:rgb(0, 64, 0)!important;
+    
+}

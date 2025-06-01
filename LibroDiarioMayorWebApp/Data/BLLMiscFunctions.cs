@@ -16,8 +16,13 @@ namespace LibroDiarioMayorWebApp.Data
             dataTable.Columns.Add("NombreCuenta");
             dataTable.Columns.Add("Debe").DefaultValue = 0;
             dataTable.Columns.Add("Haber").DefaultValue = 0;
+			dataTable.Columns.Add("GrupoCuenta");
+			dataTable.Columns.Add("TipoCuenta");
+			dataTable.Columns.Add("ClasificacionCuenta");
+			dataTable.Columns.Add("IncluidaEn");
+			dataTable.Columns.Add("CR");
 
-            return dataTable;
+			return dataTable;
         }
         public DataTable NuevaTablaPartida()
         {
@@ -120,7 +125,7 @@ namespace LibroDiarioMayorWebApp.Data
 
             for (int i = 0; i < tIdCuenta.Length; i++)
             {
-                if (idMovimiento == tIdMovimiento[i]){}
+                if (idMovimiento == tIdMovimiento[i]) { }
                 else
                 {
                     DataRow Row = NewTable.NewRow();
@@ -149,40 +154,13 @@ namespace LibroDiarioMayorWebApp.Data
             return CuentaMovida;
         }
 
-
-
-		public DataTable NuevaTablaDBPartida()
-		{
-			DataTable DBPartida = new DataTable();
-			DBPartida.Columns.Add("NumeroPartida");
-			DBPartida.Columns.Add("Fecha");
-			DBPartida.Columns.Add("Descripcion");
-			DBPartida.Columns.Add("Debe").DefaultValue = 0; ;
-			DBPartida.Columns.Add("Haber").DefaultValue = 0;
-            DBPartida.Columns.Add("IngresadoPor");
-
-			return DBPartida;
-		}
-
-		public DataTable NuevaTablaDBMovimientos()
-		{
-			DataTable DBMovimiento = new DataTable();
-			DBMovimiento.Columns.Add("IdMovimiento");
-			DBMovimiento.Columns.Add("IdPartida");
-			DBMovimiento.Columns.Add("IdCuenta");
-			DBMovimiento.Columns.Add("NombreCuenta");
-			DBMovimiento.Columns.Add("Debe").DefaultValue = 0;
-			DBMovimiento.Columns.Add("Haber").DefaultValue = 0;
-
-			return DBMovimiento;
-		}
-
         public DataTable[] ObtenerArrayTablasMovimientos(int FechaMayor, DataTable AllCuentas, DataTable AllPartidas, DataTable AllMovimientos)
         {
-            DataTable Partidas = NuevaTablaDBPartida();
-            DataTable Movimientos = NuevaTablaDBMovimientos();
+            DataTable Partidas = NuevaTablaPartida();
+            Partidas.Rows.Remove(Partidas.Rows[0]);
+            DataTable Movimientos = NuevaTablaMovimientos();
 
-            string[] NombresCuentas = new string[AllCuentas.Rows.Count];
+			string[] NombresCuentas = new string[AllCuentas.Rows.Count];
 
             DataTable[] MovimientosCuentasAMostrar = new DataTable[AllCuentas.Rows.Count];
 
@@ -201,7 +179,6 @@ namespace LibroDiarioMayorWebApp.Data
                     row["Descripcion"] = AllPartidas.Rows[i][2];
                     row["Debe"] = AllPartidas.Rows[i][3];
                     row["Haber"] = AllPartidas.Rows[i][4];
-                    row["IngresadoPor"] = AllPartidas.Rows[i][5];
                     Partidas.Rows.Add(row);
                     Partidas.AcceptChanges();
                 }
@@ -214,7 +191,6 @@ namespace LibroDiarioMayorWebApp.Data
                     if (Convert.ToInt32(Partidas.Rows[i][0]) == Convert.ToInt32(AllMovimientos.Rows[j][1]))
                     {
                         DataRow row = Movimientos.NewRow();
-                        row["IdMovimiento"] = AllMovimientos.Rows[j][0];
                         row["IdPartida"] = AllMovimientos.Rows[j][1];
                         row["IdCuenta"] = AllMovimientos.Rows[j][2];
                         row["NombreCuenta"] = AllMovimientos.Rows[j][3];
@@ -233,23 +209,45 @@ namespace LibroDiarioMayorWebApp.Data
                     }
                 }
             }
+            for (int i = 0; i < Movimientos.Rows.Count; i++)
+            {
+                for (int j = 0; j < AllCuentas.Rows.Count; j++)
+                {
+                    if (Convert.ToInt32(Movimientos.Rows[i][2]) == Convert.ToInt32(AllCuentas.Rows[j][0]))
+                    {
+                        DataRow Row = Movimientos.Rows[i];
+                        Row["GrupoCuenta"] = AllCuentas.Rows[j][2];
+                        Row["TipoCuenta"] = AllCuentas.Rows[j][3];
+                        Row["ClasificacionCuenta"] = AllCuentas.Rows[j][4];
+                        Row["IncluidaEn"] = AllCuentas.Rows[j][5];
+						Row["CR"] = AllCuentas.Rows[j][6];
+                        Movimientos.AcceptChanges();
+					}
+                }
+            }
             for (int i = 0; i < NombresCuentas.Length; i++)
             {
-                DataTable MovimientosCuentaIndividual = NuevaTablaDBMovimientos();
+                DataTable MovimientosCuentaIndividual = NuevaTablaMovimientos();
 
-                for (int j = 0; j < Movimientos.Rows.Count; j++)
+                MovimientosCuentaIndividual.AcceptChanges();
+
+				for (int j = 0; j < Movimientos.Rows.Count; j++)
                 {
                     if (NombresCuentas[i] == Movimientos.Rows[j][3].ToString())
                     {
                         DataRow row = MovimientosCuentaIndividual.NewRow();
-                        row["IdMovimiento"] = Movimientos.Rows[j][0];
                         row["IdPartida"] = Movimientos.Rows[j][1];
                         row["IdCuenta"] = Movimientos.Rows[j][2];
                         row["NombreCuenta"] = Movimientos.Rows[j][3];
                         row["Debe"] = Movimientos.Rows[j][4];
                         row["Haber"] = Movimientos.Rows[j][5];
+                        row["GrupoCuenta"] = Movimientos.Rows[j][6];
+                        row["TipoCuenta"] = Movimientos.Rows[j][7];
+                        row["ClasificacionCuenta"] = Movimientos.Rows[j][8];
+                        row["IncluidaEn"] = Movimientos.Rows[j][9];
+                        row["CR"] = Movimientos.Rows[j][10];
 
-                        MovimientosCuentaIndividual.Rows.Add(row);
+						MovimientosCuentaIndividual.Rows.Add(row);
                         MovimientosCuentaIndividual.AcceptChanges();
                     }
                 }
@@ -257,6 +255,74 @@ namespace LibroDiarioMayorWebApp.Data
 
             }
             return MovimientosCuentasAMostrar;
+        }
+
+        public DataTable[] Saldos(DataTable[] CuentasAMostrar)
+        {
+            decimal[] SaldosCuentas = new decimal[CuentasAMostrar.Length];
+			string[] TipoSaldo = new string[CuentasAMostrar.Length];
+			string[] TipoCuenta = new string[CuentasAMostrar.Length];
+			string[] ClasificacionCuenta = new string[CuentasAMostrar.Length];
+			DataTable[] TablaArraySaldo = new DataTable[CuentasAMostrar.Length];
+			for (int i = 0; i < CuentasAMostrar.Length; i++)
+            {
+                SaldosCuentas[i] = 0;
+
+				for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+                {
+                    if (Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Debe"]) > Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Haber"]))
+                    {
+						SaldosCuentas[i] += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Debe"]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Haber"]));
+                        TipoCuenta[i] = Convert.ToString(CuentasAMostrar[i].Rows[j]["TipoCuenta"]);
+						ClasificacionCuenta[i] = Convert.ToString(CuentasAMostrar[i].Rows[j]["ClasificacionCuenta"]);
+					}
+                    else
+                    {
+						SaldosCuentas[i] -= (Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Haber"]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j]["Debe"]));
+						TipoCuenta[i] = Convert.ToString(CuentasAMostrar[i].Rows[j]["TipoCuenta"]);
+						ClasificacionCuenta[i] = Convert.ToString(CuentasAMostrar[i].Rows[j]["ClasificacionCuenta"]);
+					}
+				}
+                if (SaldosCuentas[i] > 0)
+                {
+                    TipoSaldo[i] = "DEUDOR";
+                }
+				else if (SaldosCuentas[i] < 0)
+				{
+					TipoSaldo[i] = "ACREEDOR";
+				}
+			}
+            for(int i = 0; i < SaldosCuentas.Length; i++)
+            {
+				DataTable TablaSaldo = new DataTable();
+				TablaSaldo.Columns.Add("SaldoCuenta");
+				TablaSaldo.Columns.Add("TipoSaldo");
+				TablaSaldo.Columns.Add("TipoCuenta");
+				TablaSaldo.Columns.Add("ClasificacionCuenta");
+				DataRow Row = TablaSaldo.NewRow();
+                Row["SaldoCuenta"] = SaldosCuentas[i];
+                Row["TipoSaldo"] = TipoSaldo[i];
+				Row["TipoCuenta"] = TipoCuenta[i];
+				Row["ClasificacionCuenta"] = ClasificacionCuenta[i];
+				TablaSaldo.Rows.Add(Row);
+
+                TablaArraySaldo[i] = TablaSaldo;
+            }
+            return TablaArraySaldo;
+        }
+
+        public DataTable[] InventarioMovimiento(DataTable[] CuentasAMostrar)
+        {
+            DataTable[] Movimientos = Saldos(CuentasAMostrar);
+            for(int i = 0; i < Movimientos.Length; i++)
+            {
+				if (Movimientos[i].Rows[0]["ClasificacionCuenta"].ToString() != "INVENTARIO")
+                {
+                    Movimientos[i].Clear();
+                }
+
+			}
+            return Movimientos;
         }
 	}
 }

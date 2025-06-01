@@ -6,6 +6,10 @@ using System.Data;
 using System;
 using LibroDiarioMayorWebApp.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using iText.Kernel.Pdf;
+using iText.Html2pdf;
+using iText.Layout;
+using iText.Layout.Element;
 
 namespace LibroDiarioMayorWebApp.Controllers
 {
@@ -19,27 +23,56 @@ namespace LibroDiarioMayorWebApp.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult LibroMayor()
         {
-            return View();
+            return View("Mayor");
         }
-
-		public IActionResult Visualize(int FechaMayor)
+		public IActionResult BalanceGeneral()
 		{
-            DataTable AllPartidas = _context.Partidas.ToDataTable();
-            DataTable AllMovimientos = _context.Movimientos.ToDataTable();
-            DataTable AllCuentas = _context.Catalogos.ToDataTable();
-            ViewData["Fecha"] = FechaMayor;
-            ViewData["CuentasAMostrar"] = functions.ObtenerArrayTablasMovimientos(FechaMayor, AllCuentas, AllPartidas, AllMovimientos);
-            return View("Index");
+			return View();
 		}
-        public IActionResult BalanceGeneral()
+		public IActionResult EstadoResultado()
+		{
+			return View();
+		}
+
+		public IActionResult GenerarLibroMayor(int FechaMayor)
+		{
+			DataTable AllPartidas = _context.Partidas.ToDataTable();
+			DataTable AllMovimientos = _context.Movimientos.ToDataTable();
+			DataTable AllCuentas = _context.Catalogos.ToDataTable();
+			DataTable[] CuentasAMostrar = functions.ObtenerArrayTablasMovimientos(FechaMayor, AllCuentas, AllPartidas, AllMovimientos);
+			ViewData["Fecha"] = FechaMayor;
+			ViewData["CuentasAMostrar"] = CuentasAMostrar;
+            return View("Mayor");
+		}
+        public IActionResult GenerarBalanceGeneral(int FechaMayor)
         {
-            return View();
+			DataTable AllPartidas = _context.Partidas.ToDataTable();
+			DataTable AllMovimientos = _context.Movimientos.ToDataTable();
+			DataTable AllCuentas = _context.Catalogos.ToDataTable();
+			DataTable[] CuentasAMostrar = functions.ObtenerArrayTablasMovimientos(FechaMayor, AllCuentas, AllPartidas, AllMovimientos);
+
+			ViewData["Fecha"] = FechaMayor;
+			ViewData["CuentasAMostrar"] = CuentasAMostrar;
+			ViewData["Saldos"] = functions.Saldos(CuentasAMostrar);
+			return View("BalanceGeneral");
         }
-        public IActionResult EstadoResultado()
+        public IActionResult GenerarEstadoResultado(int FechaMayor)
         {
-            return View();
+			{
+				DataTable AllPartidas = _context.Partidas.ToDataTable();
+				DataTable AllMovimientos = _context.Movimientos.ToDataTable();
+				DataTable AllCuentas = _context.Catalogos.ToDataTable();
+				DataTable[] CuentasAMostrar = functions.ObtenerArrayTablasMovimientos(FechaMayor, AllCuentas, AllPartidas, AllMovimientos);
+				DataTable[] InventarioAnterior = functions.InventarioMovimiento(functions.ObtenerArrayTablasMovimientos(FechaMayor - 1, AllCuentas, AllPartidas, AllMovimientos));
+
+				ViewData["Fecha"] = FechaMayor;
+				ViewData["CuentasAMostrar"] = CuentasAMostrar;
+				ViewData["Saldos"] = functions.Saldos(CuentasAMostrar);
+				ViewData["InventarioAnterior"] = InventarioAnterior;
+				return View("EstadoResultado");
+			}
         }
     }
 }

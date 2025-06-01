@@ -1,4 +1,354 @@
 ﻿@using System.Data;
 @{
-	DataTable[] table = ViewData["Table"] as DataTable[];
+	ViewData["Title"] = "Estado de Resultado";
+
+	int FechaMayor = 2020;
+	if (ViewData["Fecha"] != null)
+	{
+		FechaMayor = Convert.ToInt32(ViewData["Fecha"]);
+	}
+}
+
+<h1>Estado de Resultado</h1>
+
+<h4>Seleccione el año de Estado de Resultado a generar</h4>
+<div class="row">
+	<div class="col-md-4">
+		<form action="GenerarEstadoResultado">
+			<div class="form-group">
+				<label for="FechaMayor" class="control-label">Año de Libro Mayor</label>
+				<input name="FechaMayor" type="number" min="1900" max="9999" step="1" value="@FechaMayor" class="form-control d-grid mb-2" />
+
+				<input type="submit" value="Visualizar" class="btn btn-primary" />
+			</div>
+		</form>
+		<br />
+	</div>
+</div>
+@if (ViewData["CuentasAMostrar"] != null)
+{
+	DataTable[] CuentasAMostrar = ViewData["CuentasAMostrar"] as DataTable[];
+	DataTable[] Saldos = ViewData["Saldos"] as DataTable[];
+	DataTable[] InventarioAnterior = ViewData["InventarioAnterior"] as DataTable[];
+
+	decimal TotalVentaBienes = 0;
+	decimal TotalCostoVenta = 0;
+	decimal TotalInventarioInicial = 0;
+	decimal TotalInventarioFinal = 0;
+	decimal TotalComprasNetas = 0;
+	decimal TotalVentasNetas = 0;
+	decimal TotalGastosOperacion = 0;
+	decimal TotalUtilidadBruta = 0;
+	decimal TotalUtilidadOperacion = 0;
+	decimal TotalIngresosNoOperacion = 0;
+	decimal TotalGastosNoOperacion = 0;
+	decimal TotalGastosIngresosNoOperacion = 0;
+	decimal TotalCompras = 0;
+	decimal TotalDevolucionesRebajasVentas = 0;
+	decimal TotalDevolucionesRebajasCompras = 0;
+	decimal TotalUtilidadNeta = 0;
+
+
+
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "") { TotalVentaBienes += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+
+
+
+
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "VENTAS DE BIENES Y SERVICIOS") { TotalVentaBienes += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "DEVOLUCIONES Y REBAJAS SOBRE VENTAS") { TotalDevolucionesRebajasVentas += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "DEVOLUCIONES Y REBAJAS SOBRE COMPRAS") { TotalDevolucionesRebajasCompras += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "GASTOS DE NO OPERACION") { TotalGastosNoOperacion += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "INGRESOS DE NO OPERACION") { TotalIngresosNoOperacion += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "COMPRAS") { TotalCompras += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "GASTOS DE OPERACION") { TotalGastosOperacion += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+	}
+	for (int i = 0; i < InventarioAnterior.Length; i++)
+	{
+		if (InventarioAnterior[i].Rows.Count > 0)
+		{
+			if (InventarioAnterior[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVENTARIO") { TotalInventarioInicial += Convert.ToDecimal(InventarioAnterior[i].Rows[0]["SaldoCuenta"]); }
+		}
+	}
+	for (int i = 0; i < CuentasAMostrar.Length; i++)
+	{
+		if (Saldos[i].Rows.Count > 0)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVENTARIO") { TotalInventarioFinal += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+	}
+		<h1 style="text-align:center">VARIEDADES LAS PALMAS S.A. DE C.V.</h1>
+		<h1 style="text-align:center">ESTADO DE RESULTADO AL 31 DE DICIEMBRE DE @FechaMayor</h1>
+		<div class="container">
+			@if (TotalVentaBienes != 0)
+			{
+				<dl class="row">
+				<dt class="col-sm-10" style="text-decoration:underline">
+						VENTA DE BIENES
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalVentaBienes * -1)
+					</dt>
+				</dl>
+				<b>Menos:</b>
+				if (TotalDevolucionesRebajasVentas != 0)
+				{
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "DEVOLUCIONES Y REBAJAS SOBRE VENTAS")
+						{
+							<dl class="row">
+								<dt class="col-sm-9" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+
+									@Saldos[i].Rows[0]["SaldoCuenta"]
+								</dt>
+							</dl>
+						}
+					}
+				}
+			<dl class="row">
+				<dt class="col-sm-10">
+					TOTAL DEVOLUCIONS Y REBAJAS SOBRE VENTAS
+				</dt>
+				<dt class="col-sm-2" style="text-decoration:underline">
+					@TotalDevolucionesRebajasVentas
+				</dt>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-10" style="text-decoration:underline">
+					VENTAS NETAS
+				</dt>
+				<dt class="col-sm-2">
+					@(TotalVentasNetas = (TotalVentaBienes * -1) - TotalDevolucionesRebajasVentas)
+				</dt>
+			</dl>
+			<b>Menos:</b>
+			<dl class="row">
+				<dt class="col-sm-10">
+					COSTO DE VENTA
+				</dt>
+				<dt class="col-sm-2">
+					@(TotalCostoVenta = (TotalCompras - (TotalDevolucionesRebajasCompras* -1) + TotalInventarioInicial - TotalInventarioFinal))
+				</dt>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-9" style="font-weight:normal">
+					Inventario Inicial
+				</dt>
+				<dt class="col-sm-2">
+					@TotalInventarioInicial
+				</dt>
+			</dl>
+			<dl class="row">
+				<dt class="col-sm-8">
+					COMPRAS:
+				</dt>
+				<dt class="col-sm-2">
+
+				</dt>
+			</dl>
+			if (TotalCompras != 0)
+			{
+				for (int i = 0; i < CuentasAMostrar.Length; i++)
+				{
+					if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "COMPRAS")
+					{
+						<dl class="row">
+							<dt class="col-sm-8" style="font-weight:normal">
+								@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+							</dt>
+							<dt class="col-sm-2" style="font-weight:normal">
+
+								@Saldos[i].Rows[0]["SaldoCuenta"]
+							</dt>
+						</dl>
+					}
+				}
+				<dl class="row">
+					<dt class="col-sm-8" Style="text-decoration:underline">
+						COMPRAS TOTALES
+					</dt>
+					<dt class="col-sm-2" style="text-decoration:underline">
+
+						@TotalCompras
+					</dt>
+				</dl>
+			<dl class="row">
+				<dt class="col-sm-8">
+					DEVOLUCIONES Y REBAJAS SOBRE COMPRAS
+				</dt>
+				<dt class="col-sm-2">
+
+				</dt>
+			</dl>
+				for (int i = 0; i < CuentasAMostrar.Length; i++)
+				{
+					if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "DEVOLUCIONES Y REBAJAS SOBRE COMPRAS")
+					{
+						<dl class="row">
+							<dt class="col-sm-7" style="font-weight:normal">
+								@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+							</dt>
+							<dt class="col-sm-2" style="font-weight:normal">
+
+								@(Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]) * - 1)
+							</dt>
+						</dl>
+					}
+				}
+				<dl class="row">
+					<dt class="col-sm-8">
+						TOTAL DEVOLUCIONS Y REBAJAS SOBRE COMPRAS
+					</dt>
+					<dt class="col-sm-2" style="text-decoration:underline">
+						@(TotalDevolucionesRebajasCompras * -1)
+					</dt>
+				</dl>
+				<dl class="row">
+					<dt class="col-sm-9">
+						COMPRAS NETAS
+					</dt>
+					<dt class="col-sm-2" style="text-decoration:underline">
+						@(TotalComprasNetas = (TotalCompras - (TotalDevolucionesRebajasCompras * -1)))
+					</dt>
+				</dl>
+				<dl class="row">
+					<dt class="col-sm-9">
+						MERCADERIA DISPONIBLE (INV. INICIAL + COMPRAS NETAS)
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalComprasNetas + TotalInventarioInicial)
+					</dt>
+				</dl>
+				<dl class="row">
+					<dt class="col-sm-9" style="font-weight:normal">
+						(-)Inventario Final
+					</dt>
+					<dt class="col-sm-2" Style="text-decoration:underline">
+						@TotalInventarioFinal
+					</dt>
+				</dl>
+				<dl class="row">
+					<dt class="col-sm-10" Style="text-decoration:underline">
+						UTILIDAD BRUTA
+					</dt>
+					<dt class="col-sm-2" style="text-decoration:underline">
+
+						@(TotalUtilidadBruta = (TotalVentasNetas - (TotalCostoVenta * -1)))
+					</dt>
+				</dl>
+				<b>Menos:</b>
+				<dl class="row">
+					<dt class="col-sm-10">
+						GASTOS DE OPERACION
+					</dt>
+					<dt class="col-sm-2" Style="text-decoration:underline">
+						@TotalGastosOperacion
+					</dt>
+				</dl>
+				for (int i = 0; i < CuentasAMostrar.Length; i++)
+				{
+					if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "GASTOS DE OPERACION")
+					{
+						<dl class="row">
+							<dt class="col-sm-7" style="font-weight:normal">
+								@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+							</dt>
+							<dt class="col-sm-2" style="font-weight:normal">
+
+								@(Saldos[i].Rows[0]["SaldoCuenta"])
+							</dt>
+						</dl>
+					}
+				}
+				<dl class="row">
+					<dt class="col-sm-10">
+						UTILIDAD DE OPERACIÓN
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalUtilidadOperacion = (TotalUtilidadBruta - TotalGastosOperacion))
+					</dt>
+				</dl>
+				<b>Menos o Mas:</b>
+				<dl class="row">
+					<dt class="col-sm-10">
+						INGRESOS Y GASTOS DE NO OPERACION
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalGastosIngresosNoOperacion = (TotalGastosNoOperacion + TotalIngresosNoOperacion))
+					</dt>
+				</dl>
+				for (int i = 0; i < CuentasAMostrar.Length; i++)
+				{
+					if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["TipoCuenta"].ToString() == "GASTOS DE NO OPERACION")
+					{
+						<dl class="row">
+							<dt class="col-sm-7" style="font-weight:normal">
+								@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+							</dt>
+							<dt class="col-sm-2" style="font-weight:normal">
+
+								@(Saldos[i].Rows[0]["SaldoCuenta"])
+							</dt>
+						</dl>
+					}
+				}
+				for (int i = 0; i < CuentasAMostrar.Length; i++)
+				{
+					if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["TipoCuenta"].ToString() == "INGRESOS NO OPERACIONALES")
+					{
+						<dl class="row">
+							<dt class="col-sm-7" style="font-weight:normal">
+								@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+							</dt>
+							<dt class="col-sm-2" style="font-weight:normal">
+
+								@(Saldos[i].Rows[0]["SaldoCuenta"])
+							</dt>
+						</dl>
+					}
+				}
+				<dl class="row">
+					<dt class="col-sm-10">
+						UTILIDAD NETA - ANTES DE IMPUESTOS
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalUtilidadNeta = (TotalUtilidadOperacion + TotalGastosIngresosNoOperacion))
+					</dt>
+				</dl>
+			}
+		}
+		</div>	
+}
+else
+{
+	<p>No hay datos relevantes al Estado de Resultado para este año.</p>
 }

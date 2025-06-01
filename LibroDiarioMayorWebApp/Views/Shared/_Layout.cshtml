@@ -26,7 +26,7 @@
                             <a class="nav-link layout-nav" asp-area="" asp-controller="Partidas" asp-action="Index">Libro Diario</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link layout-nav" asp-area="" asp-controller="Mayor" asp-action="Index">Libro Mayor</a>
+                            <a class="nav-link layout-nav" asp-area="" asp-controller="Mayor" asp-action="LibroMayor">Libro Mayor</a>
                         </li>
 
                         @if (User.IsInRole("Administrador"))
@@ -74,7 +74,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - Aplicación de Libros Contables: Diario y Mayor - Desarrollado por Carlos Fernando Hernandez Léon
-            <b class="float-end">Versión 0.8.0</b>
+            <b class="float-end">Versión 1.0.0</b>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

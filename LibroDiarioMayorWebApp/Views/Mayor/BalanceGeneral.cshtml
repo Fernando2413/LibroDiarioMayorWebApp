@@ -1,5 +1,975 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using System.Data;
 @{
+	ViewData["Title"] = "Balance General";
+
+	int FechaMayor = 2020;
+	if (ViewData["Fecha"] != null)
+	{
+		FechaMayor = Convert.ToInt32(ViewData["Fecha"]);
+	}
+}
+
+<h1>Balance General</h1>
+
+<h4>Seleccione el año de Balance General a generar</h4>
+<div class="row">
+	<div class="col-md-4">
+		<form action="GenerarBalanceGeneral">
+			<div class="form-group">
+				<label for="FechaMayor" class="control-label">Año de Libro Mayor</label>
+				<input name="FechaMayor" type="number" min="1900" max="9999" step="1" value="@FechaMayor" class="form-control d-grid mb-2" />
+
+				<input type="submit" value="Visualizar" class="btn btn-primary" />
+			</div>
+		</form>
+		<br />
+	</div>
+</div>
+
+@if (ViewData["CuentasAMostrar"] != null)
+{
+	DataTable[] CuentasAMostrar = ViewData["CuentasAMostrar"] as DataTable[];
+	DataTable[] Saldos = ViewData["Saldos"] as DataTable[];
+
+		decimal TotalActivoCorriente = 0;
+		decimal TotalEfectivo = 0;
+		decimal TotalCuentasCobrar = 0;
+		decimal TotalInventario = 0;
+		decimal TotalPagosAnticipados = 0;
+		decimal TotalInversionesPropiedad = 0;
+		decimal TotalActivoNoCorriente = 0;
+		decimal TotalPropiedadPlantaEquipo = 0;
+		decimal TotalCPCAFinanciero = 0;
+		decimal TotalISR = 0;
+		decimal TotalInversionesPermanentes = 0;
+		decimal TotalActivosBiologicos = 0;
+		decimal TotalActivosIntangibles = 0;
+		decimal TotalPasivoCorriente = 0;
+		decimal TotalPrestamosSobregiros = 0;
+		decimal TotalCuentasPagar = 0;
+		decimal TotalPasivoNoCorriente = 0;
+		decimal TotalPrestamosLP = 0;
+		decimal TotalOPAFinanciero = 0;
+		decimal TotalDocumentosPagar = 0;
+		decimal TotalAnticipoCliente = 0;
+		decimal TotalOtrosPasivos = 0;
+		decimal TotalCapital = 0;
+		decimal TotalCapitalSocial = 0;
+		decimal TotalReservas = 0;
+		decimal TotalUtilidades = 0;
+
+
+
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "ACTIVO CORRIENTE") { TotalActivoCorriente += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "ACTIVO NO CORRIENTE") { TotalActivoNoCorriente += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "PASIVO CORRIENTE") { TotalPasivoCorriente += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "PASIVO NO CORRIENTE") { TotalPasivoNoCorriente += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "CAPITAL SOCIAL") { TotalCapital += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "RESERVAS") { TotalCapital += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+			if (Saldos[i].Rows[0]["TipoCuenta"].ToString() == "UTILIDADES") { TotalCapital += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+
+
+
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "EFECTIVO Y EQUIVALENTE") { TotalEfectivo += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "CUENTAS Y DOCUMENTOS POR COBRAR") { TotalCuentasCobrar += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVENTARIO") { TotalInventario += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "PAGOS ANTICIPADOS") { TotalPagosAnticipados += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVERSIONES EN PROPIEDAD") { TotalInversionesPropiedad += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+
+
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "PROPIEDAD PLANTA Y EQUIPO") { TotalPropiedadPlantaEquipo += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "CPC - ARRENDAMIENTO FINANCIERO A LP") { TotalCPCAFinanciero += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "IMPUESTO SOBRE LA RENTA") { TotalISR += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVERSIONES PERMANENTES") { TotalInversionesPermanentes += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "ACTIVOS BIOLOGICOS") { TotalActivosBiologicos += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "ACTIVOS INTANGIBLES") { TotalActivosIntangibles += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+
+
+
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "PRESTAMOS Y SOBREGIROS BANCARIOS") { TotalPrestamosSobregiros += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "CUENTAS Y DOCUMENTOS POR PAGAR") { TotalCuentasPagar += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "PRESTAMOS POR PAGAR A LP") { TotalPrestamosLP += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "OBLIGACIONES POR ARRENDAMIENTO FINANCIERO") { TotalOPAFinanciero += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "DOCUMENTOS POR PAGAR") { TotalDocumentosPagar += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "ANTICIPO Y GARANTIA DE CLIENTE") { TotalAnticipoCliente += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "OTROS PASIVOS NO CORRIENTES") { TotalOtrosPasivos += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+
+
+
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "CAPITAL SOCIAL SUSCRITO") { TotalCapitalSocial += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "UTILIDADES RESTRINGIDAS") { TotalReservas += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+		for (int i = 0; i < CuentasAMostrar.Length; i++)
+		{
+			if (Saldos[i].Rows[0]["ClasificacionCuenta"].ToString() == "UTILIDADES DEL EJERCICIO") { TotalUtilidades += Convert.ToDecimal(Saldos[i].Rows[0]["SaldoCuenta"]); }
+		}
+	if (Math.Abs(TotalActivoCorriente) + Math.Abs(TotalActivoNoCorriente) + Math.Abs(TotalPasivoCorriente) + Math.Abs(TotalPasivoNoCorriente) + Math.Abs(TotalCapital) != 0)
+	{
+		<h1 style="text-align:center">VARIEDADES LAS PALMAS S.A. DE C.V.</h1>
+		<h1 style="text-align:center">BALANCE GENERAL AL 31 DE DICIEMBRE DE @FechaMayor</h1>
+		<div class="container">
+			<b>ACTIVO</b>
+			@if (TotalActivoCorriente != 0)
+			{
+				<dl class="row">
+					<dt class="col-sm-10">
+						ACTIVO CORRIENTE
+					</dt>
+					<dt class="col-sm-2">
+						@TotalActivoCorriente
+					</dt>
+				</dl>
+				if (TotalEfectivo != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							EFECTIVO Y EQUIVALENTE
+						</dt>
+						<dt class="col-sm-2">
+							@TotalEfectivo
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "EFECTIVO Y EQUIVALENTE")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalCuentasCobrar != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							CUENTAS Y DOCUMENTOS POR COBRAR
+						</dt>
+						<dt class="col-sm-2">
+							@TotalCuentasCobrar
+						</dt>
+					</dl>
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "CUENTAS Y DOCUMENTOS POR COBRAR")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalInventario != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							INVENTARIO
+						</dt>
+						<dt class="col-sm-2">
+							@TotalInventario
+						</dt>
+					</dl>
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVENTARIO")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalPagosAnticipados != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							PAGOS ANTICIPADOS
+						</dt>
+						<dt class="col-sm-2">
+							@TotalPagosAnticipados
+						</dt>
+					</dl>
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "PAGOS ANTICIPADOS")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalInversionesPropiedad != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							INVERSIONES EN PROPIEDAD
+						</dt>
+						<dt class="col-sm-2">
+							@TotalInversionesPropiedad
+						</dt>
+					</dl>
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVERSIONES EN PROPIEDAD")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+
+
+
+
+			}
+			@if (TotalActivoNoCorriente != 0)
+			{
+				<dl class="row">
+					<dt class="col-sm-10">
+						ACTIVO NO CORRIENTE
+					</dt>
+					<dt class="col-sm-2">
+						@TotalActivoNoCorriente
+					</dt>
+				</dl>
+				if (TotalPropiedadPlantaEquipo > 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							PROPIEDAD PLANTA Y EQUIPO
+						</dt>
+						<dt class="col-sm-2">
+							@TotalPropiedadPlantaEquipo
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "PROPIEDAD PLANTA Y EQUIPO")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalCPCAFinanciero != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							CUENTAS POR COBRAR POR ARRENDAMIENTO FINANCIERO
+						</dt>
+						<dt class="col-sm-2">
+							@TotalCPCAFinanciero
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "CPC - ARRENDAMIENTO FINANCIERO A LP")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalISR != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							IMPUESTO SOBRE LA RENTA
+						</dt>
+						<dt class="col-sm-2">
+							@TotalISR
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "IMPUESTO SOBRE LA RENTA")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalInversionesPermanentes != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							IMPUESTO SOBRE LA RENTA
+						</dt>
+						<dt class="col-sm-2">
+							@TotalInversionesPermanentes
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "INVERSIONES PERMANENTES")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalActivosBiologicos != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							ACTIVOS BIOLOGICOS
+						</dt>
+						<dt class="col-sm-2">
+							@TotalActivosBiologicos
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "ACTIVOS BIOLOGICOS")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if (TotalActivosIntangibles != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							ACTIVOS INTANGIBLES
+						</dt>
+						<dt class="col-sm-2">
+							@TotalActivosIntangibles
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "ACTIVOS INTANGIBLES")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@TotalCuenta
+								</dt>
+							</dl>
+						}
+					}
+				}
+			}
+
+			<dl class="row">
+				<dt class="col-sm-10">
+					SUMA DEL ACTIVO
+				</dt>
+				<dt class="col-sm-2" style="text-decoration: underline overline">
+					@(TotalActivoCorriente + TotalActivoNoCorriente)
+				</dt>
+			</dl>
+
+			<b>PASIVO</b>
+			@if (TotalPasivoCorriente != 0)
+			{
+				<dl class="row">
+					<dt class="col-sm-10">
+						PASIVO CORRIENTE
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalPasivoCorriente * -1)
+					</dt>
+				</dl>
+				if (TotalPrestamosSobregiros != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							PRESTAMOS Y SOBREGIROS BANCARIOS
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalPrestamosSobregiros * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "PRESTAMOS Y SOBREGIROS BANCARIOS")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if ((TotalCuentasPagar * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							CUENTAS Y DOCUMENTOS POR PAGAR
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalCuentasPagar * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "CUENTAS Y DOCUMENTOS POR PAGAR")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+				}
+
+			}
+			@if (TotalPasivoNoCorriente != 0)
+			{
+				<dl class="row">
+					<dt class="col-sm-10">
+						PASIVO NO CORRIENTE
+					</dt>
+					<dt class="col-sm-2">
+						@TotalPasivoNoCorriente
+					</dt>
+				</dl>
+				if ((TotalPrestamosLP * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							PRESTAMOS POR PAGAR A LP
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalPrestamosLP * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "PRESTAMOS POR PAGAR A LP")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+				}
+				if ((TotalOPAFinanciero * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							OBLIGACIONES POR ARRENDAMIENTO FINANCIERO
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalOPAFinanciero * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "OBLIGACIONES POR ARRENDAMIENTO FINANCIERO")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				if ((TotalDocumentosPagar * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							DOCUMENTOS POR PAGAR
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalDocumentosPagar * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "DOCUMENTOS POR PAGAR")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				if ((TotalAnticipoCliente * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							ANTICIPO Y GARANTIA DE CLIENTE
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalAnticipoCliente * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "ANTICIPO Y GARANTIA DE CLIENTE")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				if ((TotalOtrosPasivos * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							OTROS PASIVOS NO CORRIENTES
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalOtrosPasivos * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "OTROS PASIVOS NO CORRIENTES")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+			}
+			<dl class="row">
+				<dt class="col-sm-10">
+					SUMA DEL PASIVO
+				</dt>
+				<dt class="col-sm-2" style="text-decoration: underline overline">
+					@((TotalPasivoCorriente + TotalPasivoNoCorriente) * -1)
+				</dt>
+			</dl>
+			@if ((TotalCapital * -1) != 0)
+			{
+				<dl class="row">
+					<dt class="col-sm-10">
+						PATRIMONIO DE LOS ACCIONISTAS(CAPITAL)
+					</dt>
+					<dt class="col-sm-2">
+						@(TotalCapital * -1)
+					</dt>
+				</dl>
+				if ((TotalCapitalSocial * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							CAPITAL SOCIAL
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalCapitalSocial * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "CAPITAL SOCIAL SUSCRITO")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				if ((TotalReservas * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							UTILIDADES RESTRINGIDAS
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalReservas * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "UTILIDADES RESTRINGIDAS")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				if ((TotalUtilidades * -1) != 0)
+				{
+					<dl class="row">
+						<dt class="col-sm-9">
+							UTILIDADES DEL EJERCICIO
+						</dt>
+						<dt class="col-sm-2">
+							@(TotalUtilidades * -1)
+						</dt>
+					</dl>
+
+					for (int i = 0; i < CuentasAMostrar.Length; i++)
+					{
+						if (CuentasAMostrar[i].Rows.Count > 0 && CuentasAMostrar[i].Rows[0]["ClasificacionCuenta"].ToString() == "UTILIDADES POR DISTRIBUIR")
+						{
+							<dl class="row">
+								<dt class="col-sm-8" style="font-weight:normal">
+									@CuentasAMostrar[i].Rows[0]["NombreCuenta"]
+								</dt>
+								<dt class="col-sm-2" style="font-weight:normal">
+									@{
+										decimal TotalCuenta = 0;
+										for (int j = 0; j < CuentasAMostrar[i].Rows.Count; j++)
+										{
+											TotalCuenta += (Convert.ToDecimal(CuentasAMostrar[i].Rows[j][4]) - Convert.ToDecimal(CuentasAMostrar[i].Rows[j][5]));
+										}
+									}
+									@(TotalCuenta * -1)
+								</dt>
+							</dl>
+						}
+					}
+
+				}
+				<dl class="row">
+					<dt class="col-sm-10">
+						SUMA DEL PASIVO Y CAPITAL
+					</dt>
+					<dt class="col-sm-2" style="text-decoration: underline overline">
+						@((TotalPasivoCorriente + TotalPasivoNoCorriente + TotalCapital) * -1)
+					</dt>
+				</dl>
+			}
+		</div>
+	}
+	else
+	{
+		<p>No hay datos relevantes al Balance General para este año.</p>
+	}
 }
