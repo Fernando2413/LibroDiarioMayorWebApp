@@ -68,9 +68,17 @@ namespace LibroDiarioMayorWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if(await _context.Usuarios.Where(u => u.NombreUsuario == usuario.NombreUsuario).FirstOrDefaultAsync() == null)
+                {
+					_context.Add(usuario);
+					await _context.SaveChangesAsync();
+					return RedirectToAction(nameof(Index));
+				}
+                else
+                {
+                    ViewData["Mensaje01"] = "Este nombre de usuario ya existe";
+					return View(usuario);
+				}
             }
             return View(usuario);
         }
@@ -108,6 +116,11 @@ namespace LibroDiarioMayorWebApp.Controllers
             {
                 try
                 {
+                    if(id != _context.Usuarios.Where(u => u.NombreUsuario == usuario.NombreUsuario).Select(i => i.IdUsuario).FirstOrDefault())
+                    {
+                        ViewData["Mensaje01"] = "Este nombre de usuario ya existe";
+                        return View(usuario);
+                    }
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                     if (usuario.IdUsuario != Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault()))

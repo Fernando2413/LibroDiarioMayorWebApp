@@ -47,6 +47,12 @@
         </form>
     </div>
 </div>
+@if (ViewData["Mensaje01"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData["Mensaje01"]
+    </div>
+}
 
 <div>
     <a asp-action="Index">Volver</a>
